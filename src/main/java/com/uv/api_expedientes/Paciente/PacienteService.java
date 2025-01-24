@@ -13,7 +13,8 @@ public class PacienteService {
     PacienteRepository pacienteRepository;
 
     public ArrayList<Paciente> obtenerPacientes() {
-        return (ArrayList<Paciente>) pacienteRepository.findAll();
+        //Filtrar si estan activos
+        return (ArrayList<Paciente>) pacienteRepository.findByActivoTrue();
     }
 
     public Paciente guardarPaciente(Paciente paciente) {

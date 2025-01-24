@@ -14,7 +14,7 @@ public class RolService {
     RolRepository rolRepository;
 
     public ArrayList<Rol> obtenerRoles() {
-        return (ArrayList<Rol>) rolRepository.findAll();
+        return (ArrayList<Rol>) rolRepository.findByActivoTrue();
     }
 
     public Rol guardarRol(Rol rol) {
