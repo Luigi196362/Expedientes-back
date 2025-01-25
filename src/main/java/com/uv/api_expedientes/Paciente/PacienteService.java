@@ -8,12 +8,12 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class PacienteService {
-    
+
     @Autowired
     PacienteRepository pacienteRepository;
 
     public ArrayList<Paciente> obtenerPacientes() {
-        //Filtrar si estan activos
+        // Filtrar si estan activos
         return (ArrayList<Paciente>) pacienteRepository.findByActivoTrue();
     }
 
@@ -27,7 +27,6 @@ public class PacienteService {
         nuevoPaciente.setSemestre(paciente.getSemestre());
         nuevoPaciente.setTelefono(paciente.getTelefono());
         nuevoPaciente.setPrograma_educativo(paciente.getPrograma_educativo());
-        nuevoPaciente.setSeguro_facultativo(paciente.getSeguro_facultativo());
         nuevoPaciente.setOcupacion(paciente.getOcupacion());
         nuevoPaciente.setResidencia(paciente.getResidencia());
         nuevoPaciente.setReligion(paciente.getReligion());
@@ -40,7 +39,7 @@ public class PacienteService {
         return pacienteRepository.save(nuevoPaciente);
     }
 
-    public Paciente actualizarPaciente(long id,Paciente paciente) {
+    public Paciente actualizarPaciente(long id, Paciente paciente) {
         Paciente actualizarPaciente = pacienteRepository.findById(id).get();
         actualizarPaciente.setMatricula(paciente.getMatricula());
         actualizarPaciente.setNombre(paciente.getNombre());
@@ -50,7 +49,6 @@ public class PacienteService {
         actualizarPaciente.setSemestre(paciente.getSemestre());
         actualizarPaciente.setTelefono(paciente.getTelefono());
         actualizarPaciente.setPrograma_educativo(paciente.getPrograma_educativo());
-        actualizarPaciente.setSeguro_facultativo(paciente.getSeguro_facultativo());
         actualizarPaciente.setOcupacion(paciente.getOcupacion());
         actualizarPaciente.setResidencia(paciente.getResidencia());
         actualizarPaciente.setReligion(paciente.getReligion());
@@ -59,15 +57,15 @@ public class PacienteService {
         actualizarPaciente.setOrigen(paciente.getOrigen());
         actualizarPaciente.setEstado_civil(paciente.getEstado_civil());
         actualizarPaciente.setFacultad(paciente.getFacultad());
-        
+
         return pacienteRepository.save(actualizarPaciente);
     }
 
-    public Optional<Paciente> obtenerPorId(Long id){
+    public Optional<Paciente> obtenerPorId(Long id) {
         return pacienteRepository.findById(id);
     }
 
-    public boolean desactivar (Long id){
+    public boolean desactivar(Long id) {
         try {
             Paciente paciente = pacienteRepository.findById(id).get();
             paciente.setActivo(false);
