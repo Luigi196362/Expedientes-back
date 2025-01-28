@@ -1,6 +1,7 @@
 package com.uv.api_expedientes.Usuarios;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,36 +27,36 @@ public class UsuarioService {
         return (ArrayList<Usuario>) usuarioRepository.findByActivoTrue();
     }
 
-    public Usuario guardarUsuario(Usuario usuario) {
-        Usuario nuevoUsuario = new Usuario();
-        nuevoUsuario.setNombre(usuario.getNombre());
-        nuevoUsuario.setTelefono(usuario.getTelefono());
-        nuevoUsuario.setFacultad(usuario.getFacultad());
-        nuevoUsuario.setActivo(true);
-        nuevoUsuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
+    public Usuario guardarUsuario(UsuarioDTO usuarioDTO) {
+        Usuario usuario = new Usuario();
+        usuario.setNombre(usuarioDTO.getNombre());
+        usuario.setTelefono(usuarioDTO.getTelefono());
+        usuario.setFacultad(usuarioDTO.getFacultad());
+        usuario.setActivo(true);
+        usuario.setPassword(passwordEncoder.encode(usuarioDTO.getPassword()));
+        usuario.setFecha_creacion(new Date());
 
-        Rol rol = rolRepository.findById(usuario.getRol().getId()).orElseThrow(()
-                -> new RuntimeException("Rol no encontrado"));
-        nuevoUsuario.setRol(rol);
+        Rol rol = rolRepository.findById(usuarioDTO.getRol())
+                .orElseThrow(() -> new RuntimeException("Rol no encontrado"));
+        usuario.setRol(rol);
 
-        return usuarioRepository.save(nuevoUsuario);
+        return usuarioRepository.save(usuario);
     }
 
     public Optional<Usuario> obtenerPorId(Long id) {
         return usuarioRepository.findById(id);
     }
 
-    public Usuario actualizarUsuario(long id, Usuario usuario) {
+    public Usuario actualizarUsuario(long id, UsuarioDTO usuarioDTO) {
         Usuario actualizarUsuario = usuarioRepository.findById(id).get();
-        actualizarUsuario.setNombre(usuario.getNombre());
-        actualizarUsuario.setTelefono(usuario.getTelefono());
-        actualizarUsuario.setRol(usuario.getRol());
-        actualizarUsuario.setFacultad(usuario.getFacultad());
+        actualizarUsuario.setNombre(usuarioDTO.getNombre());
+        actualizarUsuario.setTelefono(usuarioDTO.getTelefono());
+        actualizarUsuario.setFacultad(usuarioDTO.getFacultad());
+        actualizarUsuario.setFecha_creacion(usuarioDTO.getFecha_creacion());
+        actualizarUsuario.setPassword(passwordEncoder.encode(usuarioDTO.getPassword()));
 
-        actualizarUsuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
-
-        Rol rol = rolRepository.findById(usuario.getRol().getId()).orElseThrow(()
-                -> new RuntimeException("Rol no encontrado"));
+        Rol rol = rolRepository.findById(usuarioDTO.getRol())
+                .orElseThrow(() -> new RuntimeException("Rol no encontrado"));
         actualizarUsuario.setRol(rol);
 
         return usuarioRepository.save(actualizarUsuario);

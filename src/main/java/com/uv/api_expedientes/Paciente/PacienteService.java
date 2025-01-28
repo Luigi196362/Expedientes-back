@@ -1,6 +1,7 @@
 package com.uv.api_expedientes.Paciente;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +36,7 @@ public class PacienteService {
         nuevoPaciente.setOrigen(paciente.getOrigen());
         nuevoPaciente.setEstado_civil(paciente.getEstado_civil());
         nuevoPaciente.setFacultad(paciente.getFacultad());
+        nuevoPaciente.setFecha_creacion(new Date());
         nuevoPaciente.setActivo(true);
         return pacienteRepository.save(nuevoPaciente);
     }
@@ -57,6 +59,7 @@ public class PacienteService {
         actualizarPaciente.setOrigen(paciente.getOrigen());
         actualizarPaciente.setEstado_civil(paciente.getEstado_civil());
         actualizarPaciente.setFacultad(paciente.getFacultad());
+        actualizarPaciente.setFecha_creacion(paciente.getFecha_creacion());
 
         return pacienteRepository.save(actualizarPaciente);
     }

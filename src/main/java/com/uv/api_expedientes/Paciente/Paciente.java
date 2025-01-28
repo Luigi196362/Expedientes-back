@@ -34,10 +34,19 @@ public class Paciente {
     private String origen;
     private String estado_civil;
     private String facultad;
+    private Date fecha_creacion;
     private boolean activo;
 
     public long getId() {
         return id;
+    }
+
+    public Date getFecha_creacion() {
+        return fecha_creacion;
+    }
+
+    public void setFecha_creacion(Date fecha_creacion) {
+        this.fecha_creacion = fecha_creacion;
     }
 
     public void setId(long id) {

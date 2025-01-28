@@ -1,5 +1,7 @@
 package com.uv.api_expedientes.Usuarios;
 
+import java.util.Date;
+
 import com.uv.api_expedientes.Roles.Rol;
 
 import jakarta.persistence.Column;
@@ -25,12 +27,21 @@ public class Usuario {
     private String facultad;
     private String password;
     private boolean activo;
+    private Date fecha_creacion;
+
+    public Date getFecha_creacion() {
+        return fecha_creacion;
+    }
+
+    public void setFecha_creacion(Date fecha_creacion) {
+        this.fecha_creacion = fecha_creacion;
+    }
 
     @ManyToOne
     @JoinColumn(name = "rol_id")
     private Rol rol;
 
-    //getters and setters
+    // getters and setters
     public long getId() {
         return id;
     }
@@ -78,6 +89,7 @@ public class Usuario {
     public void setPassword(String password) {
         this.password = password;
     }
+
     public boolean isActivo() {
         return activo;
     }

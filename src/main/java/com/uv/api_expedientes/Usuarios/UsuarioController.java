@@ -26,8 +26,8 @@ public class UsuarioController {
     }
 
     @PostMapping()
-    public Usuario guardarUsuario(@RequestBody Usuario usuario) {
-        return this.usuarioService.guardarUsuario(usuario);
+    public Usuario guardarUsuario(@RequestBody UsuarioDTO usuarioDTO) {
+        return this.usuarioService.guardarUsuario(usuarioDTO);
     }
 
     @GetMapping(path = "/{id}")
@@ -36,10 +36,10 @@ public class UsuarioController {
     }
 
     @PutMapping(path = "/{id}")
-    public Usuario actualizarUsuario(@PathVariable("id") long id, @RequestBody Usuario usuario) {
-        return this.usuarioService.actualizarUsuario(id, usuario);
+    public Usuario actualizarUsuario(@PathVariable("id") long id, @RequestBody UsuarioDTO usuarioDTO) {
+        return this.usuarioService.actualizarUsuario(id, usuarioDTO);
     }
-    
+
     @DeleteMapping(path = "/{id}")
     public String eleminarRol(@PathVariable("id") long id) {
         boolean ok = this.usuarioService.desactivar(id);
