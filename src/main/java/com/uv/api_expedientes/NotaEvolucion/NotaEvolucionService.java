@@ -7,8 +7,8 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.uv.api_expedientes.Paciente.Paciente;
-import com.uv.api_expedientes.Paciente.PacienteRepository;
+import com.uv.api_expedientes.Pacientes.Paciente;
+import com.uv.api_expedientes.Pacientes.PacienteRepository;
 import com.uv.api_expedientes.Registro.Registro;
 import com.uv.api_expedientes.Registro.RegistroRepository;
 import com.uv.api_expedientes.Usuarios.Usuario;
@@ -37,19 +37,19 @@ public class NotaEvolucionService {
         return notaEvolucionRepository.findById(id);
     }
 
-    public NotaEvolucion guardarNota(long idUsuario, long idPaciente,NotaEvolucion notaEvolucion) {
+    public NotaEvolucion guardarNota(long idUsuario, long idPaciente, NotaEvolucion notaEvolucion) {
 
         Registro nuevoRegistro = new Registro();
         NotaEvolucion nuevaNotaEvolucion = new NotaEvolucion();
 
         nuevoRegistro.setFecha_creacion(new Date());
 
-        Usuario usuarioRegistro = usuarioRepository.findById(idUsuario).orElseThrow(()
-                -> new RuntimeException("Usuario no encontrado"));
+        Usuario usuarioRegistro = usuarioRepository.findById(idUsuario)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
         nuevoRegistro.setUsuario(usuarioRegistro);
 
-        Paciente pacienteRegistro = pacienteRepository.findById(idPaciente).orElseThrow(()
-                -> new RuntimeException("Paciente no encontrado"));
+        Paciente pacienteRegistro = pacienteRepository.findById(idPaciente)
+                .orElseThrow(() -> new RuntimeException("Paciente no encontrado"));
         nuevoRegistro.setPaciente(pacienteRegistro);
 
         Registro registroGuardado = registroRepository.save(nuevoRegistro);
@@ -73,7 +73,7 @@ public class NotaEvolucionService {
         nuevaNotaEvolucion.setDiagnostico(notaEvolucion.getDiagnostico());
         nuevaNotaEvolucion.setTratamiento(notaEvolucion.getTratamiento());
         nuevaNotaEvolucion.setRegistro(registroGuardado);
-        return notaEvolucionRepository.save(nuevaNotaEvolucion) ;
+        return notaEvolucionRepository.save(nuevaNotaEvolucion);
     }
 
 }

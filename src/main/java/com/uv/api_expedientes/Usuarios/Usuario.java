@@ -2,7 +2,7 @@ package com.uv.api_expedientes.Usuarios;
 
 import java.util.Date;
 
-import com.uv.api_expedientes.Roles.Rol;
+import com.uv.api_expedientes.Permisos.Roles.Rol;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

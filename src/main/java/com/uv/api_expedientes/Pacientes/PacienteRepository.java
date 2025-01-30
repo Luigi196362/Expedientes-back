@@ -1,4 +1,4 @@
-package com.uv.api_expedientes.Paciente;
+package com.uv.api_expedientes.Pacientes;
 
 import java.util.List;
 
@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface PacienteRepository extends CrudRepository<Paciente, Long> {
-    //Filtrar si estan activos
+    // Filtrar si estan activos
     List<Paciente> findByActivoTrue();
 }

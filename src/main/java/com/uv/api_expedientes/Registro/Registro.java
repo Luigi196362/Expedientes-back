@@ -2,7 +2,7 @@ package com.uv.api_expedientes.Registro;
 
 import java.util.Date;
 
-import com.uv.api_expedientes.Paciente.Paciente;
+import com.uv.api_expedientes.Pacientes.Paciente;
 import com.uv.api_expedientes.Usuarios.Usuario;
 
 import jakarta.persistence.Column;
@@ -27,14 +27,12 @@ public class Registro {
     @JoinColumn(name = "usuario_id")
     private Usuario usuario;
 
-
     @ManyToOne
     @JoinColumn(name = "paciente_id")
     private Paciente paciente;
 
     private Date fecha_creacion;
 
-    
     public long getId() {
         return id;
     }
@@ -67,5 +65,4 @@ public class Registro {
         this.fecha_creacion = fecha_creacion;
     }
 
-    
 }

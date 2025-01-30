@@ -1,4 +1,4 @@
-package com.uv.api_expedientes.Paciente;
+package com.uv.api_expedientes.Pacientes;
 
 import java.util.Date;
 

@@ -1,6 +1,7 @@
-package com.uv.api_expedientes.Roles;
+package com.uv.api_expedientes.Permisos.Roles;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.uv.api_expedientes.Permisos.Roles.dto.RolResponseDTO;
+
 @RestController
 @RequestMapping("/rol")
 public class RolController {
@@ -21,7 +24,7 @@ public class RolController {
     RolService rolService;
 
     @GetMapping()
-    public ArrayList<Rol> obtenerRoles() {
+    public List<RolResponseDTO> obtenerRoles() {
         return rolService.obtenerRoles();
     }
 
@@ -40,13 +43,4 @@ public class RolController {
         return this.rolService.actualizarRol(id, rol);
     }
 
-    @DeleteMapping(path = "/{id}")
-    public String eleminarRol(@PathVariable("id") long id) {
-        boolean ok = this.rolService.desactivar(id);
-        if (ok) {
-            return "Se elimino el rol " + id;
-        } else {
-            return "No se pudo eliminar el rol " + id;
-        }
-    }
 }

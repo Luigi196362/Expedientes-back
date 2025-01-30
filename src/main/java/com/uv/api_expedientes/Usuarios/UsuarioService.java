@@ -8,8 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.uv.api_expedientes.Roles.Rol;
-import com.uv.api_expedientes.Roles.RolRepository;
+import com.uv.api_expedientes.Permisos.Roles.Rol;
+import com.uv.api_expedientes.Permisos.Roles.RolRepository;
+import com.uv.api_expedientes.Usuarios.dto.UsuarioRequestDTO;
+import com.uv.api_expedientes.Usuarios.dto.UsuarioResponseDto;
 
 @Service
 public class UsuarioService {
@@ -23,11 +25,28 @@ public class UsuarioService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public ArrayList<Usuario> obtenerUsuarios() {
-        return (ArrayList<Usuario>) usuarioRepository.findByActivoTrue();
+    public ArrayList<UsuarioResponseDto> obtenerUsuarios() {
+        ArrayList<Usuario> usuarios = (ArrayList<Usuario>) usuarioRepository.findByActivoTrue();
+        ArrayList<UsuarioResponseDto> usuariosResponse = new ArrayList<>();
+
+        for (Usuario usuario : usuarios) {
+
+            String rolNombre = usuario.getRol().getNombre();
+
+            UsuarioResponseDto usuarioResponseDto = new UsuarioResponseDto(
+                    usuario.getNombre(),
+                    usuario.getTelefono(),
+                    usuario.getFacultad(),
+                    usuario.getFecha_creacion(),
+                    rolNombre);
+
+            usuariosResponse.add(usuarioResponseDto);
+        }
+
+        return usuariosResponse;
     }
 
-    public Usuario guardarUsuario(UsuarioDTO usuarioDTO) {
+    public Usuario guardarUsuario(UsuarioRequestDTO usuarioDTO) {
         Usuario usuario = new Usuario();
         usuario.setNombre(usuarioDTO.getNombre());
         usuario.setTelefono(usuarioDTO.getTelefono());
@@ -47,7 +66,7 @@ public class UsuarioService {
         return usuarioRepository.findById(id);
     }
 
-    public Usuario actualizarUsuario(long id, UsuarioDTO usuarioDTO) {
+    public Usuario actualizarUsuario(long id, UsuarioRequestDTO usuarioDTO) {
         Usuario actualizarUsuario = usuarioRepository.findById(id).get();
         actualizarUsuario.setNombre(usuarioDTO.getNombre());
         actualizarUsuario.setTelefono(usuarioDTO.getTelefono());

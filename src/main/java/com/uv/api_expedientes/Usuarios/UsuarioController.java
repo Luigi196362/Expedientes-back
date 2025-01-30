@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import com.uv.api_expedientes.Usuarios.dto.UsuarioRequestDTO;
+import com.uv.api_expedientes.Usuarios.dto.UsuarioResponseDto;
 
 @RestController
 @RequestMapping("/usuario")
@@ -21,12 +23,12 @@ public class UsuarioController {
     UsuarioService usuarioService;
 
     @GetMapping()
-    public ArrayList<Usuario> obtenerUsuarios() {
+    public ArrayList<UsuarioResponseDto> obtenerUsuarios() {
         return usuarioService.obtenerUsuarios();
     }
 
     @PostMapping()
-    public Usuario guardarUsuario(@RequestBody UsuarioDTO usuarioDTO) {
+    public Usuario guardarUsuario(@RequestBody UsuarioRequestDTO usuarioDTO) {
         return this.usuarioService.guardarUsuario(usuarioDTO);
     }
 
@@ -36,7 +38,7 @@ public class UsuarioController {
     }
 
     @PutMapping(path = "/{id}")
-    public Usuario actualizarUsuario(@PathVariable("id") long id, @RequestBody UsuarioDTO usuarioDTO) {
+    public Usuario actualizarUsuario(@PathVariable("id") long id, @RequestBody UsuarioRequestDTO usuarioDTO) {
         return this.usuarioService.actualizarUsuario(id, usuarioDTO);
     }
 

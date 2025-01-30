@@ -1,4 +1,4 @@
-package com.uv.api_expedientes;
+package com.uv.api_expedientes.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,25 +15,22 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         /*
-        http.authorizeHttpRequests(request -> request.
-        requestMatchers("/usuario/**").permitAll().
-        requestMatchers("/rol/**").permitAll()
-        ).csrf(csrf -> csrf.disable());
+         * http.authorizeHttpRequests(request -> request.
+         * requestMatchers("/usuario/**").permitAll().
+         * requestMatchers("/rol/**").permitAll()
+         * ).csrf(csrf -> csrf.disable());
+         * 
+         * return http.build();
+         */
 
-        return http.build();
-        */
+        // Permitir todo
 
-        //Permitir todo
-        
-        
         http.authorizeHttpRequests(requests -> requests
-                .anyRequest().permitAll()
-            )
-            .csrf(csrf -> csrf.disable()); // Deshabilita CSRF si no es necesario
-            
+                .anyRequest().permitAll())
+                .csrf(csrf -> csrf.disable()); // Deshabilita CSRF si no es necesario
 
         return http.build();
-        
+
     }
 
     @Bean
@@ -41,4 +38,3 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 }
-

@@ -1,15 +1,24 @@
-package com.uv.api_expedientes.Usuarios;
+package com.uv.api_expedientes.Usuarios.dto;
 
 import java.util.Date;
 
-public class UsuarioDTO {
+public class UsuarioResponseDto {
     private String nombre;
     private String telefono;
     private String facultad;
-    private String password;
     private Date fecha_creacion;
-    private Long rol;
+    private String rolNombre; // Cambié de Long a String para el nombre del rol
 
+    // Constructor
+    public UsuarioResponseDto(String nombre, String telefono, String facultad, Date fecha_creacion, String rolNombre) {
+        this.nombre = nombre;
+        this.telefono = telefono;
+        this.facultad = facultad;
+        this.fecha_creacion = fecha_creacion;
+        this.rolNombre = rolNombre;
+    }
+
+    // Getters y setters
     public String getNombre() {
         return nombre;
     }
@@ -34,22 +43,6 @@ public class UsuarioDTO {
         this.facultad = facultad;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public Long getRol() {
-        return rol;
-    }
-
-    public void setRol(Long rol) {
-        this.rol = rol;
-    }
-
     public Date getFecha_creacion() {
         return fecha_creacion;
     }
@@ -58,4 +51,11 @@ public class UsuarioDTO {
         this.fecha_creacion = fecha_creacion;
     }
 
+    public String getRolNombre() {
+        return rolNombre;
+    }
+
+    public void setRolNombre(String rolNombre) {
+        this.rolNombre = rolNombre;
+    }
 }
