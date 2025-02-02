@@ -17,8 +17,8 @@ import com.uv.api_expedientes.Permisos.Recursos.Recurso;
 import com.uv.api_expedientes.Permisos.Recursos.RecursoRepository;
 import com.uv.api_expedientes.Permisos.Roles.Rol;
 import com.uv.api_expedientes.Permisos.Roles.RolRepository;
-import com.uv.api_expedientes.Usuarios.Usuario;
-import com.uv.api_expedientes.Usuarios.UsuarioRepository;
+import com.uv.api_expedientes.Users.User;
+import com.uv.api_expedientes.Users.UserRepository;
 
 @Component
 public class DataInitializer implements CommandLineRunner {
@@ -27,13 +27,13 @@ public class DataInitializer implements CommandLineRunner {
     private final RolRepository rolRepository;
     private final RecursoRepository recursoRepository;
     private final PermisoRepository permisoRepository;
-    private final UsuarioRepository usuarioRepository;
+    private final UserRepository usuarioRepository;
     private final PasswordEncoder passwordEncoder;
 
     // Constructor que inyecta el repositorio de Acciones
     public DataInitializer(AccionRepository accionRepository, RolRepository rolRepository,
             RecursoRepository recursoRepository, PermisoRepository permisoRepository,
-            UsuarioRepository usuarioRepository,
+            UserRepository usuarioRepository,
             PasswordEncoder passwordEncoder) {
         this.accionRepository = accionRepository;
         this.rolRepository = rolRepository;
@@ -85,27 +85,27 @@ public class DataInitializer implements CommandLineRunner {
                 System.out.println("Recurso creado: " + recurso.getNombre());
             }
         }
-
-        // Crear usuario Administrador
-        Usuario usuario = new Usuario();
-
-        usuario.setNombre("Admin");
-        usuario.setTelefono("(272) 123-4567");
-        usuario.setFacultad("test");
-        usuario.setActivo(true);
-        usuario.setPassword(passwordEncoder.encode("admin"));
-        usuario.setFecha_creacion(new Date());
-        Rol rolUsuario = rolRepository.findByNombre("Admin")
-                .orElseThrow(() -> new RuntimeException("Rol no encontrado"));
-        usuario.setRol(rolUsuario);
-
-        if (usuarioRepository.findByNombre(usuario.getNombre()).isEmpty()) {
-
-            usuarioRepository.save(usuario);
-
-            System.out.println("Usuario " + usuario.getNombre() + " creado ");
-        }
-
+        /*
+         * // Crear usuario Administrador
+         * Usuario usuario = new Usuario();
+         * 
+         * usuario.setNombre("Admin");
+         * usuario.setTelefono("(272) 123-4567");
+         * usuario.setFacultad("test");
+         * usuario.setActivo(true);
+         * usuario.setPassword(passwordEncoder.encode("admin"));
+         * usuario.setFecha_creacion(new Date());
+         * Rol rolUsuario = rolRepository.findByNombre("Admin")
+         * .orElseThrow(() -> new RuntimeException("Rol no encontrado"));
+         * usuario.setRol(rolUsuario);
+         * 
+         * if (usuarioRepository.findByNombre(usuario.getNombre()).isEmpty()) {
+         * 
+         * usuarioRepository.save(usuario);
+         * 
+         * System.out.println("Usuario " + usuario.getNombre() + " creado ");
+         * }
+         */
         // Añadir permisos a Administrador
 
         // Obtener todos los recursos y acciones
@@ -133,7 +133,8 @@ public class DataInitializer implements CommandLineRunner {
                         // Guardar el nuevo permiso
                         permisoRepository.save(nuevoPermiso);
 
-                        System.out.println("Permiso creado para el rol Admin: Recurso " + recurso.getNombre() +
+                        System.out.println("Permiso creado para el rol Admin: Recurso " +
+                                recurso.getNombre() +
                                 " - Acción " + accion.getNombre());
                     }
                 }

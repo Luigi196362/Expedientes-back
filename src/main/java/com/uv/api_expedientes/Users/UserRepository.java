@@ -1,4 +1,4 @@
-package com.uv.api_expedientes.Usuarios;
+package com.uv.api_expedientes.Users;
 
 import java.util.List;
 import java.util.Optional;
@@ -7,9 +7,9 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface UsuarioRepository extends CrudRepository<Usuario, Long> {
+public interface UserRepository extends CrudRepository<User, Long> {
     // Filtrar si estan activos
-    List<Usuario> findByActivoTrue();
+    List<User> findByActivoTrue();
 
-    Optional<Usuario> findByNombre(String nombre);
+    Optional<User> findByUsername(String username);
 }

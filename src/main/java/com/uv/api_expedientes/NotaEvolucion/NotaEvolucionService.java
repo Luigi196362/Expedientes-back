@@ -11,8 +11,8 @@ import com.uv.api_expedientes.Pacientes.Paciente;
 import com.uv.api_expedientes.Pacientes.PacienteRepository;
 import com.uv.api_expedientes.Registro.Registro;
 import com.uv.api_expedientes.Registro.RegistroRepository;
-import com.uv.api_expedientes.Usuarios.Usuario;
-import com.uv.api_expedientes.Usuarios.UsuarioRepository;
+import com.uv.api_expedientes.Users.User;
+import com.uv.api_expedientes.Users.UserRepository;
 
 @Service
 public class NotaEvolucionService {
@@ -21,7 +21,7 @@ public class NotaEvolucionService {
     NotaEvolucionRepository notaEvolucionRepository;
 
     @Autowired
-    UsuarioRepository usuarioRepository;
+    UserRepository usuarioRepository;
 
     @Autowired
     PacienteRepository pacienteRepository;
@@ -43,11 +43,11 @@ public class NotaEvolucionService {
         NotaEvolucion nuevaNotaEvolucion = new NotaEvolucion();
 
         nuevoRegistro.setFecha_creacion(new Date());
-
-        Usuario usuarioRegistro = usuarioRepository.findById(idUsuario)
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
-        nuevoRegistro.setUsuario(usuarioRegistro);
-
+        /*
+         * User usuarioRegistro = usuarioRepository.findById(idUsuario)
+         * .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+         * nuevoRegistro.setUsuario(usuarioRegistro);
+         */
         Paciente pacienteRegistro = pacienteRepository.findById(idPaciente)
                 .orElseThrow(() -> new RuntimeException("Paciente no encontrado"));
         nuevoRegistro.setPaciente(pacienteRegistro);

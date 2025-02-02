@@ -15,7 +15,15 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "permiso")
 public class Permiso {
@@ -26,50 +34,21 @@ public class Permiso {
     private long id;
 
     @ManyToOne
-    @JoinColumn(name = "rol_id")
+    @JoinColumn(name = "rol_id", nullable = false)
     private Rol rol;
 
     @ManyToOne
-    @JoinColumn(name = "recurso_id")
+    @JoinColumn(name = "recurso_id", nullable = false)
     private Recurso recurso;
 
     @ManyToOne
-    @JoinColumn(name = "accion_id")
+    @JoinColumn(name = "accion_id", nullable = false)
     private Accion accion;
-
-    public Permiso() {
-
-    }
 
     public Permiso(Rol rol, Recurso recurso, Accion accion) {
         this.rol = rol;
         this.recurso = recurso;
         this.accion = accion;
 
-    }
-
-    // Getters y Setters
-    public Rol getRol() {
-        return rol;
-    }
-
-    public void setRol(Rol rol) {
-        this.rol = rol;
-    }
-
-    public Recurso getRecurso() {
-        return recurso;
-    }
-
-    public void setRecurso(Recurso recurso) {
-        this.recurso = recurso;
-    }
-
-    public Accion getAccion() {
-        return accion;
-    }
-
-    public void setAccion(Accion accion) {
-        this.accion = accion;
     }
 }

@@ -28,8 +28,9 @@ public class NotaEvolucionController {
         return this.notaEvolucionService.obtenerPorId(id);
     }
 
-    @PostMapping(path ="/{idRegistro}/{idPaciente}")
-    public NotaEvolucion guardarNota(@PathVariable("idRegistro") long idUsuario,@PathVariable("idPaciente") long idPaciente, @RequestBody NotaEvolucion notaEvolucion) {
+    @PostMapping(path = "/{idRegistro}/{idPaciente}")
+    public NotaEvolucion guardarNota(@PathVariable("idRegistro") long idUsuario,
+            @PathVariable("idPaciente") long idPaciente, @RequestBody NotaEvolucion notaEvolucion) {
         return this.notaEvolucionService.guardarNota(idUsuario, idPaciente, notaEvolucion);
     }
 
