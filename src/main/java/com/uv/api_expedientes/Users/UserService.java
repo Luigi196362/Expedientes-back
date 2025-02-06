@@ -2,16 +2,15 @@
 package com.uv.api_expedientes.Users;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.uv.api_expedientes.Auth.RegisterRequest;
 import com.uv.api_expedientes.Permisos.Roles.Rol;
 import com.uv.api_expedientes.Permisos.Roles.RolRepository;
+import com.uv.api_expedientes.Users.dto.UserEditDto;
 import com.uv.api_expedientes.Users.dto.UserResponseDto;
 
 @Service
@@ -35,6 +34,7 @@ public class UserService {
             String rolNombre = user.getRol().getNombre();
 
             UserResponseDto userResponseDto = new UserResponseDto(
+                    user.getId(),
                     user.getUsername(),
                     user.getTelefono(),
                     user.getFacultad(),
@@ -47,33 +47,64 @@ public class UserService {
         return usersResponse;
     }
 
-    public Optional<User> obtenerPorId(Long id) {
-        return userRepository.findById(id);
+    public Optional<UserResponseDto> obtenerPorId(Long id) {
+        return userRepository.findById(id).map(user -> {
+            if (!user.isActivo()) {
+                throw new RuntimeException("Usuario no activo");
+            }
+            String rolNombre = user.getRol().getNombre();
+            return new UserResponseDto(
+                    user.getId(),
+                    user.getUsername(),
+                    user.getTelefono(),
+                    user.getFacultad(),
+                    user.getFecha_creacion(),
+                    rolNombre);
+        }).or(() -> {
+            throw new RuntimeException("Usuario no encontrado");
+        });
     }
 
-    // public Usuario actualizarUsuario(long id, RegisterRequest usuarioDTO) {
-    // Usuario actualizarUsuario = usuarioRepository.findById(id).get();
-    // actualizarUsuario.setNombre(usuarioDTO.getNombre());
-    // actualizarUsuario.setTelefono(usuarioDTO.getTelefono());
-    // actualizarUsuario.setFacultad(usuarioDTO.getFacultad());
-    // actualizarUsuario.setFecha_creacion(usuarioDTO.getFecha_creacion());
-    // actualizarUsuario.setPassword(passwordEncoder.encode(usuarioDTO.getPassword()));
+    public String actualizarUsuario(long id, UserEditDto userEditDto) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+        if (!user.isActivo()) {
+            throw new RuntimeException("Usuario no activo");
+        }
 
-    // Rol rol = rolRepository.findById(usuarioDTO.getRol())
-    // .orElseThrow(() -> new RuntimeException("Rol no encontrado"));
-    // actualizarUsuario.setRol(rol);
+        Optional.ofNullable(userEditDto.getUsername()).ifPresent(user::setUsername);
+        Optional.ofNullable(userEditDto.getTelefono()).ifPresent(user::setTelefono);
+        Optional.ofNullable(userEditDto.getFacultad()).ifPresent(user::setFacultad);
+        Optional.ofNullable(userEditDto.getPassword()).ifPresent(user::setPassword);
+        Optional.ofNullable(userEditDto.getPassword())
+                .ifPresent(password -> user.setPassword(passwordEncoder.encode(password)));
 
-    // return usuarioRepository.save(actualizarUsuario);
-    // }
+        if (userEditDto.getRol() != null) {
+            Rol rol = rolRepository.findById(userEditDto.getRol())
+                    .orElseThrow(() -> new RuntimeException("Rol no encontrado"));
+            user.setRol(rol);
+        }
 
-    public boolean deactivateUser(Long id) {
+        userRepository.save(user);
+        return "Usuario editado correctamente";
+    }
+
+    public String deactivateUser(Long id) {
         try {
-            User user = userRepository.findById(id).get();
+            User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+            if (!user.isActivo()) {
+                return "Usuario ya está desactivado";
+            }
             user.setActivo(false);
             userRepository.save(user);
-            return true;
+            return "Se eliminó el usuario";
         } catch (Exception e) {
-            return false;
+            throw new RuntimeException("No se pudo eliminar el usuario");
         }
     }
+
+    public String exportar() {
+        return "Pdf generado correctamente";
+    }
+
 }

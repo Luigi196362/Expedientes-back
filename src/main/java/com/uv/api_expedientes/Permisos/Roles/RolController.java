@@ -1,11 +1,12 @@
 package com.uv.api_expedientes.Permisos.Roles;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,33 +15,45 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.uv.api_expedientes.Permisos.Roles.dto.RolNamesResponseDTO;
+import com.uv.api_expedientes.Permisos.Roles.dto.RolRequestDTO;
 import com.uv.api_expedientes.Permisos.Roles.dto.RolResponseDTO;
 
 @RestController
-@RequestMapping("/rol")
+@RequestMapping("/api/roles")
 public class RolController {
 
     @Autowired
     RolService rolService;
 
-    @GetMapping()
+    @GetMapping("/ver")
     public List<RolResponseDTO> obtenerRoles() {
         return rolService.obtenerRoles();
     }
 
-    @PostMapping()
-    public Rol guardarRol(@RequestBody Rol rol) {
-        return this.rolService.guardarRol(rol);
+    @GetMapping("/ver/nombres")
+    public List<RolNamesResponseDTO> obtenerNombresRoles() {
+        return rolService.obtenerNombresRoles();
     }
 
-    @GetMapping(path = "/{id}")
-    public Optional<Rol> obtenerPorId(@PathVariable("id") Long id) {
+    @PostMapping("/crear")
+    public ResponseEntity<Map<String, String>> guardarRol(@RequestBody RolRequestDTO rolRequestDTO) {
+        this.rolService.guardarRol(rolRequestDTO);
+
+        Map<String, String> response = new HashMap<>();
+        response.put("mensaje", "Rol creado exitosamente");
+
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/ver/{id}")
+    public Optional<RolResponseDTO> obtenerPorId(@PathVariable("id") Long id) {
         return this.rolService.obtenerPorId(id);
     }
 
-    @PutMapping(path = "/{id}")
-    public Rol actualizarRol(@PathVariable("id") long id, @RequestBody Rol rol) {
-        return this.rolService.actualizarRol(id, rol);
+    @PutMapping("/editar/{id}")
+    public String actualizarRol(@PathVariable("id") long id, @RequestBody RolRequestDTO rolRequestDTO) {
+        return this.rolService.actualizarRol(id, rolRequestDTO);
     }
 
 }

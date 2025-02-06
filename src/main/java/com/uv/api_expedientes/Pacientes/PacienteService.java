@@ -7,6 +7,8 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.uv.api_expedientes.Pacientes.dto.PacienteEditDto;
+
 @Service
 public class PacienteService {
 
@@ -19,63 +21,82 @@ public class PacienteService {
     }
 
     public Paciente guardarPaciente(Paciente paciente) {
-        Paciente nuevoPaciente = new Paciente();
-        nuevoPaciente.setMatricula(paciente.getMatricula());
-        nuevoPaciente.setNombre(paciente.getNombre());
-        nuevoPaciente.setSexo(paciente.getSexo());
-        nuevoPaciente.setFecha_nacimiento(paciente.getFecha_nacimiento());
-        nuevoPaciente.setGrupo(paciente.getGrupo());
-        nuevoPaciente.setSemestre(paciente.getSemestre());
-        nuevoPaciente.setTelefono(paciente.getTelefono());
-        nuevoPaciente.setPrograma_educativo(paciente.getPrograma_educativo());
-        nuevoPaciente.setOcupacion(paciente.getOcupacion());
-        nuevoPaciente.setResidencia(paciente.getResidencia());
-        nuevoPaciente.setReligion(paciente.getReligion());
-        nuevoPaciente.setEscolaridad(paciente.getEscolaridad());
-        nuevoPaciente.setNss(paciente.getNss());
-        nuevoPaciente.setOrigen(paciente.getOrigen());
-        nuevoPaciente.setEstado_civil(paciente.getEstado_civil());
-        nuevoPaciente.setFacultad(paciente.getFacultad());
-        nuevoPaciente.setFecha_creacion(new Date());
-        nuevoPaciente.setActivo(true);
+        Paciente nuevoPaciente = Paciente.builder()
+                .matricula(paciente.getMatricula())
+                .nombre(paciente.getNombre())
+                .sexo(paciente.getSexo())
+                .fecha_nacimiento(paciente.getFecha_nacimiento())
+                .grupo(paciente.getGrupo())
+                .semestre(paciente.getSemestre())
+                .telefono(paciente.getTelefono())
+                .programa_educativo(paciente.getPrograma_educativo())
+                .ocupacion(paciente.getOcupacion())
+                .residencia(paciente.getResidencia())
+                .religion(paciente.getReligion())
+                .escolaridad(paciente.getEscolaridad())
+                .nss(paciente.getNss())
+                .origen(paciente.getOrigen())
+                .estado_civil(paciente.getEstado_civil())
+                .facultad(paciente.getFacultad())
+                .fecha_creacion(new Date())
+                .activo(true)
+                .build();
+
         return pacienteRepository.save(nuevoPaciente);
     }
 
-    public Paciente actualizarPaciente(long id, Paciente paciente) {
-        Paciente actualizarPaciente = pacienteRepository.findById(id).get();
-        actualizarPaciente.setMatricula(paciente.getMatricula());
-        actualizarPaciente.setNombre(paciente.getNombre());
-        actualizarPaciente.setSexo(paciente.getSexo());
-        actualizarPaciente.setFecha_nacimiento(paciente.getFecha_nacimiento());
-        actualizarPaciente.setGrupo(paciente.getGrupo());
-        actualizarPaciente.setSemestre(paciente.getSemestre());
-        actualizarPaciente.setTelefono(paciente.getTelefono());
-        actualizarPaciente.setPrograma_educativo(paciente.getPrograma_educativo());
-        actualizarPaciente.setOcupacion(paciente.getOcupacion());
-        actualizarPaciente.setResidencia(paciente.getResidencia());
-        actualizarPaciente.setReligion(paciente.getReligion());
-        actualizarPaciente.setEscolaridad(paciente.getEscolaridad());
-        actualizarPaciente.setNss(paciente.getNss());
-        actualizarPaciente.setOrigen(paciente.getOrigen());
-        actualizarPaciente.setEstado_civil(paciente.getEstado_civil());
-        actualizarPaciente.setFacultad(paciente.getFacultad());
-        actualizarPaciente.setFecha_creacion(paciente.getFecha_creacion());
+    public String actualizarPaciente(long id, PacienteEditDto pacienteEditDto) {
+        Paciente paciente = pacienteRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Paciente no encontrado"));
 
-        return pacienteRepository.save(actualizarPaciente);
+        if (!paciente.isActivo()) {
+            throw new RuntimeException("Paciente no activo");
+        }
+
+        Optional.ofNullable(pacienteEditDto.getMatricula()).ifPresent(paciente::setMatricula);
+        Optional.ofNullable(pacienteEditDto.getNombre()).ifPresent(paciente::setNombre);
+        Optional.ofNullable(pacienteEditDto.getSexo()).ifPresent(paciente::setSexo);
+        Optional.ofNullable(pacienteEditDto.getFecha_nacimiento()).ifPresent(paciente::setFecha_nacimiento);
+        Optional.ofNullable(pacienteEditDto.getGrupo()).ifPresent(paciente::setGrupo);
+        Optional.ofNullable(pacienteEditDto.getSemestre()).ifPresent(paciente::setSemestre);
+        Optional.ofNullable(pacienteEditDto.getTelefono()).ifPresent(paciente::setTelefono);
+        Optional.ofNullable(pacienteEditDto.getPrograma_educativo()).ifPresent(paciente::setPrograma_educativo);
+        Optional.ofNullable(pacienteEditDto.getOcupacion()).ifPresent(paciente::setOcupacion);
+        Optional.ofNullable(pacienteEditDto.getResidencia()).ifPresent(paciente::setResidencia);
+        Optional.ofNullable(pacienteEditDto.getReligion()).ifPresent(paciente::setReligion);
+        Optional.ofNullable(pacienteEditDto.getEscolaridad()).ifPresent(paciente::setEscolaridad);
+        Optional.ofNullable(pacienteEditDto.getNss()).ifPresent(paciente::setNss);
+        Optional.ofNullable(pacienteEditDto.getOrigen()).ifPresent(paciente::setOrigen);
+        Optional.ofNullable(pacienteEditDto.getEstado_civil()).ifPresent(paciente::setEstado_civil);
+        Optional.ofNullable(pacienteEditDto.getFacultad()).ifPresent(paciente::setFacultad);
+
+        pacienteRepository.save(paciente);
+        return "Paciente editado correctamente";
     }
 
     public Optional<Paciente> obtenerPorId(Long id) {
-        return pacienteRepository.findById(id);
+        Optional<Paciente> paciente = pacienteRepository.findById(id);
+        if (paciente.isEmpty()) {
+            throw new RuntimeException("Paciente no encontrado");
+        }
+        if (!paciente.get().isActivo()) {
+            throw new RuntimeException("Paciente no está activo");
+        }
+        return paciente;
     }
 
-    public boolean desactivar(Long id) {
+    public String desactivarPaciente(Long id) {
         try {
-            Paciente paciente = pacienteRepository.findById(id).get();
+            Paciente paciente = pacienteRepository.findById(id)
+                    .orElseThrow(() -> new RuntimeException("Paciente no encontrado"));
+            if (!paciente.isActivo()) {
+                return "Paciente ya está desactivado";
+            }
             paciente.setActivo(false);
             pacienteRepository.save(paciente);
-            return true;
+            return "Se eliminó el paciente";
         } catch (Exception e) {
-            return false;
+            throw new RuntimeException("No se pudo eliminar el paciente");
         }
     }
 

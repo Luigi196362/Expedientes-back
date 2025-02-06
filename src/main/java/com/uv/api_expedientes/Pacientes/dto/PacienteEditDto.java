@@ -1,13 +1,7 @@
-package com.uv.api_expedientes.Pacientes;
+package com.uv.api_expedientes.Pacientes.dto;
 
 import java.util.Date;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,16 +9,9 @@ import lombok.NoArgsConstructor;
 
 @Data
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
-@Entity
-@Table(name = "pacientes")
-public class Paciente {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(unique = true, nullable = false)
-    private long id;
+@NoArgsConstructor
+public class PacienteEditDto {
 
     private String matricula;
     private String nombre;
@@ -42,7 +29,5 @@ public class Paciente {
     private String origen;
     private String estado_civil;
     private String facultad;
-    private Date fecha_creacion;
-    private boolean activo;
 
 }

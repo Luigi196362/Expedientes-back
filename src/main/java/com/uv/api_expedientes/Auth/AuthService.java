@@ -1,5 +1,7 @@
 package com.uv.api_expedientes.Auth;
 
+import java.util.Date;
+
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -46,7 +48,7 @@ public class AuthService {
                                 .telefono(request.getTelefono())
                                 .facultad(request.getFacultad())
                                 .password(passwordEncoder.encode(request.getPassword()))
-                                .fecha_creacion(request.getFecha_creacion())
+                                .fecha_creacion(new Date())
                                 .activo(true)
                                 .rol(rol)
                                 .build();

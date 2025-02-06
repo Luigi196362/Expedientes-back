@@ -20,7 +20,10 @@ import com.uv.api_expedientes.Permisos.Roles.RolRepository;
 import com.uv.api_expedientes.Users.User;
 import com.uv.api_expedientes.Users.UserRepository;
 
+import lombok.AllArgsConstructor;
+
 @Component
+@AllArgsConstructor
 public class DataInitializer implements CommandLineRunner {
 
     private final AccionRepository accionRepository;
@@ -30,19 +33,6 @@ public class DataInitializer implements CommandLineRunner {
     private final UserRepository usuarioRepository;
     private final PasswordEncoder passwordEncoder;
 
-    // Constructor que inyecta el repositorio de Acciones
-    public DataInitializer(AccionRepository accionRepository, RolRepository rolRepository,
-            RecursoRepository recursoRepository, PermisoRepository permisoRepository,
-            UserRepository usuarioRepository,
-            PasswordEncoder passwordEncoder) {
-        this.accionRepository = accionRepository;
-        this.rolRepository = rolRepository;
-        this.recursoRepository = recursoRepository;
-        this.permisoRepository = permisoRepository;
-        this.usuarioRepository = usuarioRepository;
-        this.passwordEncoder = passwordEncoder;
-    }
-
     @Override
     public void run(String... args) {
 
@@ -51,7 +41,8 @@ public class DataInitializer implements CommandLineRunner {
                 new Accion("Crear", "Permite crear"),
                 new Accion("Editar", "Permite editar"),
                 new Accion("Eliminar", "Permite eliminar"),
-                new Accion("Ver", "Permite ver"));
+                new Accion("Ver", "Permite ver"),
+                new Accion("Exportar", "Permite exportar a pdf"));
 
         for (Accion accion : accionesBasicas) {
             if (accionRepository.findByNombre(accion.getNombre()).isEmpty()) {
@@ -62,9 +53,7 @@ public class DataInitializer implements CommandLineRunner {
 
         // Crear Roles básicos con sus respectivas descripciones
         List<Rol> rolesBasicos = List.of(
-                new Rol("Admin", "Tiene acceso a todo el sistema"),
-                new Rol("Usuario", "Acceso limitado"),
-                new Rol("Médico", "Gestiona pacientes y expedientes"));
+                new Rol(1, "superAdmin", "Tiene acceso a todo el sistema"));
 
         for (Rol rol : rolesBasicos) {
             if (rolRepository.findByNombre(rol.getNombre()).isEmpty()) {
@@ -75,9 +64,11 @@ public class DataInitializer implements CommandLineRunner {
 
         // Crear Recursos básicos con sus respectivas descripciones
         List<Recurso> recursosBasiscos = List.of(
-                new Recurso("Pacientes", "Recurso de paciente"),
-                new Recurso("Usuarios", "Recurso de paciente"),
-                new Recurso("Registros", "Recurso de paciente"));
+                new Recurso("pacientes", "Recurso de paciente"),
+                new Recurso("usuarios", "Recurso de paciente"),
+                new Recurso("registros", "Recurso de paciente"),
+                new Recurso("roles", "Recurso de roles"),
+                new Recurso("permisos", "Recurso de permisos"));
 
         for (Recurso recurso : recursosBasiscos) {
             if (recursoRepository.findByNombre(recurso.getNombre()).isEmpty()) {
@@ -85,28 +76,29 @@ public class DataInitializer implements CommandLineRunner {
                 System.out.println("Recurso creado: " + recurso.getNombre());
             }
         }
-        /*
-         * // Crear usuario Administrador
-         * Usuario usuario = new Usuario();
-         * 
-         * usuario.setNombre("Admin");
-         * usuario.setTelefono("(272) 123-4567");
-         * usuario.setFacultad("test");
-         * usuario.setActivo(true);
-         * usuario.setPassword(passwordEncoder.encode("admin"));
-         * usuario.setFecha_creacion(new Date());
-         * Rol rolUsuario = rolRepository.findByNombre("Admin")
-         * .orElseThrow(() -> new RuntimeException("Rol no encontrado"));
-         * usuario.setRol(rolUsuario);
-         * 
-         * if (usuarioRepository.findByNombre(usuario.getNombre()).isEmpty()) {
-         * 
-         * usuarioRepository.save(usuario);
-         * 
-         * System.out.println("Usuario " + usuario.getNombre() + " creado ");
-         * }
-         */
-        // Añadir permisos a Administrador
+
+        Rol rolUsuario = rolRepository.findByNombre("superAdmin")
+                .orElseThrow(() -> new RuntimeException("Rol no encontrado"));
+
+        // Crear usuario Administrador
+        User usuario = User.builder()
+                .username("superAdmin")
+                .telefono("272 1234 567")
+                .facultad("negocios")
+                .password(passwordEncoder.encode("superAdmin"))
+                .fecha_creacion(new Date())
+                .activo(true)
+                .rol(rolUsuario)
+                .build();
+
+        if (usuarioRepository.findByUsername(usuario.getUsername()).isEmpty()) {
+
+            usuarioRepository.save(usuario);
+
+            System.out.println("Usuario " + usuario + " creado ");
+        }
+
+        // Añadir permisos a super Administrador
 
         // Obtener todos los recursos y acciones
         List<Recurso> todosRecursos = (ArrayList<Recurso>) recursoRepository.findAll();
@@ -133,7 +125,7 @@ public class DataInitializer implements CommandLineRunner {
                         // Guardar el nuevo permiso
                         permisoRepository.save(nuevoPermiso);
 
-                        System.out.println("Permiso creado para el rol Admin: Recurso " +
+                        System.out.println("Permiso creado para el rol super Admin: Recurso " +
                                 recurso.getNombre() +
                                 " - Acción " + accion.getNombre());
                     }

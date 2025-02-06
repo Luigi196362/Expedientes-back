@@ -11,7 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "rol")
+@Table(name = "roles")
 public class Rol {
 
     @Id
@@ -25,7 +25,7 @@ public class Rol {
     @OneToMany(mappedBy = "rol", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Permiso> permisos; // Relación con Permisos
 
-    public Rol(String nombre, String descripcion) {
+    public Rol(long id, String nombre, String descripcion) {
         this.nombre = nombre;
         this.descripcion = descripcion;
     }

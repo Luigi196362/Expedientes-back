@@ -13,40 +13,38 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.uv.api_expedientes.Pacientes.dto.PacienteEditDto;
+
 @RestController
-@RequestMapping("/paciente")
+@RequestMapping("/api/pacientes")
 public class PacienteController {
 
     @Autowired
     PacienteService pacienteService;
 
-    @GetMapping()
+    @GetMapping("/ver")
     public ArrayList<Paciente> obtenerPacientes() {
         return pacienteService.obtenerPacientes();
     }
 
-    @PostMapping()
+    @PostMapping("/crear")
     public Paciente guardarPaciente(@RequestBody Paciente paciente) {
         return this.pacienteService.guardarPaciente(paciente);
     }
 
-    @GetMapping(path = "/{id}")
+    @GetMapping("/ver/{id}")
     public Optional<Paciente> obtenerPorId(@PathVariable("id") Long id) {
         return this.pacienteService.obtenerPorId(id);
     }
 
-    @PutMapping(path = "/{id}")
-    public Paciente actualizarPaciente(@PathVariable("id") long id, @RequestBody Paciente paciente) {
-        return this.pacienteService.actualizarPaciente(id, paciente);
+    @PutMapping("/editar/{id}")
+    public String actualizarPaciente(@PathVariable("id") long id,
+            @RequestBody PacienteEditDto pacienteEditDto) {
+        return this.pacienteService.actualizarPaciente(id, pacienteEditDto);
     }
 
-    @DeleteMapping(path = "/{id}")
-    public String eliminarPaciente(@PathVariable("id") long id) {
-        boolean ok = this.pacienteService.desactivar(id);
-        if (ok) {
-            return "Se elimino el paciente " + id;
-        } else {
-            return "No se pudo eliminar el paciente " + id;
-        }
+    @DeleteMapping("/eliminar/{id}")
+    public String desactivarPaciente(@PathVariable("id") long id) {
+        return this.pacienteService.desactivarPaciente(id);
     }
 }

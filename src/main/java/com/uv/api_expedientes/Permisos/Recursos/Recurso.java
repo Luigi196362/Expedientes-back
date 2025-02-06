@@ -6,9 +6,17 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
-@Table(name = "recurso")
+@Table(name = "recursos")
 public class Recurso {
 
     @Id
@@ -21,35 +29,8 @@ public class Recurso {
     @Column(nullable = false)
     private String descripcion;
 
-    public Recurso() {
-    }
-
     public Recurso(String nombre, String descripcion) {
         this.nombre = nombre;
-        this.descripcion = descripcion;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public String getDescripcion() {
-        return descripcion;
-    }
-
-    public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
     }
 

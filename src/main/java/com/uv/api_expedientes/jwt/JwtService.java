@@ -1,11 +1,7 @@
 package com.uv.api_expedientes.jwt;
 
 import java.security.Key;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.function.Function;
 
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,9 +10,8 @@ import org.springframework.stereotype.Service;
 import com.uv.api_expedientes.Permisos.Permiso;
 import com.uv.api_expedientes.Users.User;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
+
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 
@@ -26,15 +21,18 @@ public class JwtService {
     private static final String SECRET_KEY = "586E3272357538782F413F4428472B4B6250655368566B597033733676397924";
 
     public String getToken(UserDetails userDetails) {
-        Map<String, Object> extraClaims = new HashMap<>();
-
         if (userDetails instanceof User) {
             User user = (User) userDetails;
 
-            // Guardamos el nombre del rol
+            // Verificar si el usuario está activo
+            if (!user.isActivo()) {
+                throw new RuntimeException("El usuario no está activo");
+            }
+
+            Map<String, Object> extraClaims = new HashMap<>();
             extraClaims.put("rol", user.getRol().getNombre());
 
-            // Agrupamos los permisos por recurso
+            // Agrupamos permisos por recurso
             Map<String, List<String>> permisosAgrupados = new HashMap<>();
             if (user.getRol().getPermisos() != null) {
                 for (Permiso permiso : user.getRol().getPermisos()) {
@@ -45,23 +43,19 @@ public class JwtService {
                 }
             }
             extraClaims.put("permisos", permisosAgrupados);
-        } else {
-            extraClaims.put("roles", userDetails.getAuthorities());
-        }
 
-        return generateToken(extraClaims, userDetails);
+            return generateToken(extraClaims, userDetails);
+        } else {
+            throw new RuntimeException("El usuario no es válido");
+        }
     }
 
     private String generateToken(Map<String, Object> extraClaims, UserDetails user) {
-        return Jwts
-                .builder()
+        return Jwts.builder()
                 .setClaims(extraClaims)
-                .setSubject(user.getUsername()) // El username se guarda en "sub"
+                .setSubject(user.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                // Token válido por 24 horas
-                // .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24))
-                // Token válido por 30 segundos
-                .setExpiration(new Date(System.currentTimeMillis() + 30 * 1000))
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24)) // 24 horas
                 .signWith(getKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
@@ -77,12 +71,23 @@ public class JwtService {
 
     public boolean isTokenValid(String token, UserDetails userDetails) {
         final String username = getUsernameFromToken(token);
+
+        if (!(userDetails instanceof User)) {
+            return false;
+        }
+
+        User user = (User) userDetails;
+
+        // Bloquear acceso si el usuario está inactivo
+        if (!user.isActivo()) {
+            return false;
+        }
+
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
 
     private Claims getAllClaims(String token) {
-        return Jwts
-                .parserBuilder()
+        return Jwts.parserBuilder()
                 .setSigningKey(getKey())
                 .build()
                 .parseClaimsJws(token)
