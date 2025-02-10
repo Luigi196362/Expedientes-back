@@ -52,8 +52,14 @@ public class RolController {
     }
 
     @PutMapping("/editar/{id}")
-    public String actualizarRol(@PathVariable("id") long id, @RequestBody RolRequestDTO rolRequestDTO) {
-        return this.rolService.actualizarRol(id, rolRequestDTO);
+    public ResponseEntity<Map<String, String>> actualizarRol(@PathVariable("id") long id,
+            @RequestBody RolRequestDTO rolRequestDTO) {
+        this.rolService.actualizarRol(id, rolRequestDTO);
+
+        Map<String, String> response = new HashMap<>();
+        response.put("mensaje", "Rol editado exitosamente");
+
+        return ResponseEntity.ok(response);
     }
 
 }

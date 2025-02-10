@@ -30,12 +30,12 @@ public class Registro {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(unique = true, nullable = false)
     private long id;
-    /*
-     * @ManyToOne
-     * 
-     * @JoinColumn(name = "usuario_id")
-     * private User usuario;
-     */
+
+    @ManyToOne
+
+    @JoinColumn(name = "usuario_id")
+    private User usuario;
+
     @ManyToOne
     @JoinColumn(name = "paciente_id")
     private Paciente paciente;

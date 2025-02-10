@@ -67,8 +67,7 @@ public class DataInitializer implements CommandLineRunner {
                 new Recurso("pacientes", "Recurso de paciente"),
                 new Recurso("usuarios", "Recurso de paciente"),
                 new Recurso("registros", "Recurso de paciente"),
-                new Recurso("roles", "Recurso de roles"),
-                new Recurso("permisos", "Recurso de permisos"));
+                new Recurso("roles", "Recurso de roles"));
 
         for (Recurso recurso : recursosBasiscos) {
             if (recursoRepository.findByNombre(recurso.getNombre()).isEmpty()) {

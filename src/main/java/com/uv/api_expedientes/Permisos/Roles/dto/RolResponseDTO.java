@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class RolResponseDTO {
+    private long id;
     private String nombre;
     private String descripcion;
     private List<PermisoDTO> permisos;

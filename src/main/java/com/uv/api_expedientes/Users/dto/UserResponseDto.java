@@ -17,6 +17,7 @@ public class UserResponseDto {
     private String telefono;
     private String facultad;
     private Date fecha_creacion;
-    private String rolNombre; // Cambié de Long a String para el nombre del rol
+    private Long rolId;
+    private String rolNombre;
 
 }

@@ -32,13 +32,14 @@ public class UserService {
         for (User user : users) {
 
             String rolNombre = user.getRol().getNombre();
-
+            Long rolId = user.getRol().getId();
             UserResponseDto userResponseDto = new UserResponseDto(
                     user.getId(),
                     user.getUsername(),
                     user.getTelefono(),
                     user.getFacultad(),
                     user.getFecha_creacion(),
+                    rolId,
                     rolNombre);
 
             usersResponse.add(userResponseDto);
@@ -53,12 +54,14 @@ public class UserService {
                 throw new RuntimeException("Usuario no activo");
             }
             String rolNombre = user.getRol().getNombre();
+            Long rolId = user.getRol().getId();
             return new UserResponseDto(
                     user.getId(),
                     user.getUsername(),
                     user.getTelefono(),
                     user.getFacultad(),
                     user.getFecha_creacion(),
+                    rolId,
                     rolNombre);
         }).or(() -> {
             throw new RuntimeException("Usuario no encontrado");
@@ -72,11 +75,20 @@ public class UserService {
             throw new RuntimeException("Usuario no activo");
         }
 
-        Optional.ofNullable(userEditDto.getUsername()).ifPresent(user::setUsername);
-        Optional.ofNullable(userEditDto.getTelefono()).ifPresent(user::setTelefono);
-        Optional.ofNullable(userEditDto.getFacultad()).ifPresent(user::setFacultad);
-        Optional.ofNullable(userEditDto.getPassword()).ifPresent(user::setPassword);
+        Optional.ofNullable(userEditDto.getUsername())
+                .filter(username -> !username.trim().isEmpty())
+                .ifPresent(user::setUsername);
+
+        Optional.ofNullable(userEditDto.getTelefono())
+                .filter(telefono -> !telefono.trim().isEmpty())
+                .ifPresent(user::setTelefono);
+
+        Optional.ofNullable(userEditDto.getFacultad())
+                .filter(facultad -> !facultad.trim().isEmpty())
+                .ifPresent(user::setFacultad);
+
         Optional.ofNullable(userEditDto.getPassword())
+                .filter(password -> !password.trim().isEmpty())
                 .ifPresent(password -> user.setPassword(passwordEncoder.encode(password)));
 
         if (userEditDto.getRol() != null) {

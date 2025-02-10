@@ -44,9 +44,15 @@ public class UserController {
     }
 
     @PutMapping("/editar/{id}")
-    public String actualizarUsuario(@PathVariable("id") long id,
+    public ResponseEntity<Map<String, String>> actualizarUsuario(@PathVariable("id") long id,
             @RequestBody UserEditDto userEditDto) {
-        return this.userService.actualizarUsuario(id, userEditDto);
+        this.userService.actualizarUsuario(id, userEditDto);
+
+        // Devolver JSON en lugar de String
+        Map<String, String> response = new HashMap<>();
+        response.put("mensaje", "Actualización exitosa");
+
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/crear")

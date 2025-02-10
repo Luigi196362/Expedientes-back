@@ -50,7 +50,7 @@ public class RolService {
                     .map(entry -> new PermisoDTO(entry.getKey(), entry.getValue()))
                     .collect(Collectors.toList());
 
-            RolResponseDTO rolDTO = new RolResponseDTO(rol.getNombre(), rol.getDescripcion(), permisosDTO);
+            RolResponseDTO rolDTO = new RolResponseDTO(rol.getId(), rol.getNombre(), rol.getDescripcion(), permisosDTO);
             rolesDTO.add(rolDTO);
         }
 
@@ -156,7 +156,8 @@ public class RolService {
                             .map(entry -> new PermisoDTO(entry.getKey(), entry.getValue()))
                             .collect(Collectors.toList());
 
-                    return Optional.of(new RolResponseDTO(rol.getNombre(), rol.getDescripcion(), permisosDTO));
+                    return Optional
+                            .of(new RolResponseDTO(rol.getId(), rol.getNombre(), rol.getDescripcion(), permisosDTO));
                 }).orElseThrow(() -> new RuntimeException("Rol no encontrado"));
     }
 
