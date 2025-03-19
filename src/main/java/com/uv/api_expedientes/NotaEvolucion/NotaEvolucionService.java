@@ -29,25 +29,27 @@ public class NotaEvolucionService {
     @Autowired
     RegistroRepository registroRepository;
 
-    public ArrayList<NotaEvolucion> obtenerNotas() {
-        return (ArrayList<NotaEvolucion>) notaEvolucionRepository.findAll();
-    }
+    // public ArrayList<NotaEvolucion> obtenerNotas() {
+    // return (ArrayList<NotaEvolucion>) notaEvolucionRepository.findAll();
+    // }
 
-    public Optional<NotaEvolucion> obtenerPorId(Long id) {
-        return notaEvolucionRepository.findById(id);
-    }
+    // public Optional<NotaEvolucion> obtenerPorId(Long id) {
+    // return notaEvolucionRepository.findById(id);
+    // }
 
-    public NotaEvolucion guardarNota(long idUsuario, long idPaciente, NotaEvolucion notaEvolucion) {
+    public String guardarNota(String Username, long idPaciente, NotaEvolucion notaEvolucion) {
 
         Registro nuevoRegistro = new Registro();
         NotaEvolucion nuevaNotaEvolucion = new NotaEvolucion();
 
+        User usuario = usuarioRepository.findByUsername(Username)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
+        nuevoRegistro.setUsuario(usuario);
+
         nuevoRegistro.setFecha_creacion(new Date());
-        /*
-         * User usuarioRegistro = usuarioRepository.findById(idUsuario)
-         * .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
-         * nuevoRegistro.setUsuario(usuarioRegistro);
-         */
+        nuevoRegistro.setTipoRegistro("Nota de evolución");
+
         Paciente pacienteRegistro = pacienteRepository.findById(idPaciente)
                 .orElseThrow(() -> new RuntimeException("Paciente no encontrado"));
         nuevoRegistro.setPaciente(pacienteRegistro);
@@ -73,7 +75,8 @@ public class NotaEvolucionService {
         nuevaNotaEvolucion.setDiagnostico(notaEvolucion.getDiagnostico());
         nuevaNotaEvolucion.setTratamiento(notaEvolucion.getTratamiento());
         nuevaNotaEvolucion.setRegistro(registroGuardado);
-        return notaEvolucionRepository.save(nuevaNotaEvolucion);
+        notaEvolucionRepository.save(nuevaNotaEvolucion);
+        return "Registro con éxito";
     }
 
 }

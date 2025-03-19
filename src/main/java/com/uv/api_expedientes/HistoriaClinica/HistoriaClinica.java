@@ -1,4 +1,4 @@
-package com.uv.api_expedientes.NotaEvolucion;
+package com.uv.api_expedientes.HistoriaClinica;
 
 import com.uv.api_expedientes.Registro.Registro;
 
@@ -20,8 +20,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "NotaEvolucion")
-public class NotaEvolucion {
+@Table(name = "HistoriaClinica")
+public class HistoriaClinica {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,23 +32,13 @@ public class NotaEvolucion {
     @JoinColumn(name = "registro_id")
     private Registro registro;
 
-    private String interrogatorio;
-    private int peso;
-    private int talla;
-    private float imc;
-    private String ta;
-    private int fc;
-    private int fr;
-    private int temperatura;
-    private int saturacion;
-    private int glicemia;
-    private int hemoglobina;
-    private String hemotipo;
-    private String padecimiento;
-    private String exploracion;
-    private String analisis;
-    private String plan;
-    private String diagnostico;
+    private String antecedentes_heredo_familiares;
+    private String antecedentes_personales_no_patologicos;
+    private String antecedentes_personales_patologicos;
+    private String medicamentos_actuales;
+    private String diagnostico_inicial;
     private String tratamiento;
+    private String observaciones;
+    private String alergias;
 
 }

@@ -42,4 +42,5 @@ public class Registro {
 
     private Date fecha_creacion;
 
+    private String tipoRegistro;
 }
