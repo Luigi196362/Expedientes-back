@@ -6,11 +6,9 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.uv.api_expedientes.Permisos.Permiso;
-import com.uv.api_expedientes.Permisos.Roles.Rol;
+import com.uv.api_expedientes.AccessControl.Roles.Rol;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -36,9 +34,13 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(unique = true, nullable = false)
-    private long id;
-    @Column(nullable = false)
+    private Integer id;
+    private String matricula;
     private String username;
+    private String curp;
+    private String rfc;
+    private String cedulaProfesional;
+    private String especialidad;
     private String password;
     private String telefono;
     private String facultad;
@@ -53,45 +55,36 @@ public class User implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> authorities = new ArrayList<>();
 
-        // Agregar el rol como autoridad principal
-        authorities.add(new SimpleGrantedAuthority("ROLE_" + rol.getNombre().toUpperCase()));
-
-        // Agregar los permisos asociados al rol
-        if (rol.getPermisos() != null) {
-            for (Permiso permiso : rol.getPermisos()) {
-                String authority = permiso.getRecurso().getNombre().toUpperCase() + "_" +
-                        permiso.getAccion().getNombre().toUpperCase();
-                authorities.add(new SimpleGrantedAuthority(authority));
-            }
-        }
-
         return authorities;
     }
 
     @Override
-    public String getUsername() {
-
-        return this.username;
-    }
-
-    @Override
     public boolean isAccountNonExpired() {
-        return true;
+        // TODO Auto-generated method stub
+        return UserDetails.super.isAccountNonExpired();
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        // TODO Auto-generated method stub
+        return UserDetails.super.isAccountNonLocked();
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return true;
+        // TODO Auto-generated method stub
+        return UserDetails.super.isCredentialsNonExpired();
     }
 
     @Override
     public boolean isEnabled() {
-        return true;
+        // TODO Auto-generated method stub
+        return UserDetails.super.isEnabled();
+    }
+
+    @Override
+    public String getUsername() {
+        return this.username;
     }
 
 }

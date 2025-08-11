@@ -1,107 +1,46 @@
-
 package com.uv.api_expedientes.Users;
 
-import java.util.ArrayList;
-import java.util.Optional;
+import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.uv.api_expedientes.Permisos.Roles.Rol;
-import com.uv.api_expedientes.Permisos.Roles.RolRepository;
-import com.uv.api_expedientes.Users.dto.UserEditDto;
-import com.uv.api_expedientes.Users.dto.UserResponseDto;
+import com.uv.api_expedientes.Users.dtos.AllUsersDto;
+
+import lombok.RequiredArgsConstructor;
 
 @Service
+@RequiredArgsConstructor
 public class UserService {
 
-    @Autowired
-    UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    @Autowired
-    RolRepository rolRepository;
+    public List<AllUsersDto> getUsers() {
+        List<User> users = userRepository.findByActivoTrue();
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    public ArrayList<UserResponseDto> getUsers() {
-        ArrayList<User> users = (ArrayList<User>) userRepository.findByActivoTrue();
-        ArrayList<UserResponseDto> usersResponse = new ArrayList<>();
-
-        for (User user : users) {
-
-            String rolNombre = user.getRol().getNombre();
-            Long rolId = user.getRol().getId();
-            UserResponseDto userResponseDto = new UserResponseDto(
-                    user.getId(),
-                    user.getUsername(),
-                    user.getTelefono(),
-                    user.getFacultad(),
-                    user.getFecha_creacion(),
-                    rolId,
-                    rolNombre);
-
-            usersResponse.add(userResponseDto);
+        if (users.isEmpty()) {
+            throw new RuntimeException("No hay usuarios activos");
         }
 
-        return usersResponse;
+        List<AllUsersDto> allUsersDto = users.stream()
+                .map(user -> new AllUsersDto(
+                        user.getMatricula(),
+                        user.getUsername(),
+                        user.getTelefono(),
+                        user.getFacultad(),
+                        user.getEspecialidad(),
+                        user.getRol() != null ? user.getRol().getNombre() : "No hay rol asignado"))
+                .toList();
+
+        return allUsersDto;
     }
 
-    public Optional<UserResponseDto> obtenerPorId(Long id) {
-        return userRepository.findById(id).map(user -> {
-            if (!user.isActivo()) {
-                throw new RuntimeException("Usuario no activo");
-            }
-            String rolNombre = user.getRol().getNombre();
-            Long rolId = user.getRol().getId();
-            return new UserResponseDto(
-                    user.getId(),
-                    user.getUsername(),
-                    user.getTelefono(),
-                    user.getFacultad(),
-                    user.getFecha_creacion(),
-                    rolId,
-                    rolNombre);
-        }).or(() -> {
-            throw new RuntimeException("Usuario no encontrado");
-        });
-    }
+    // public User getUserById(Integer id) {
+    // return userRepository.findById(id)
+    // .orElseThrow(() -> new RuntimeException("Usuario no encontrado con ID: " +
+    // id));
+    // }
 
-    public String actualizarUsuario(long id, UserEditDto userEditDto) {
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
-        if (!user.isActivo()) {
-            throw new RuntimeException("Usuario no activo");
-        }
-
-        Optional.ofNullable(userEditDto.getUsername())
-                .filter(username -> !username.trim().isEmpty())
-                .ifPresent(user::setUsername);
-
-        Optional.ofNullable(userEditDto.getTelefono())
-                .filter(telefono -> !telefono.trim().isEmpty())
-                .ifPresent(user::setTelefono);
-
-        Optional.ofNullable(userEditDto.getFacultad())
-                .filter(facultad -> !facultad.trim().isEmpty())
-                .ifPresent(user::setFacultad);
-
-        Optional.ofNullable(userEditDto.getPassword())
-                .filter(password -> !password.trim().isEmpty())
-                .ifPresent(password -> user.setPassword(passwordEncoder.encode(password)));
-
-        if (userEditDto.getRol() != null) {
-            Rol rol = rolRepository.findById(userEditDto.getRol())
-                    .orElseThrow(() -> new RuntimeException("Rol no encontrado"));
-            user.setRol(rol);
-        }
-
-        userRepository.save(user);
-        return "Usuario editado correctamente";
-    }
-
-    public String deactivateUser(Long id) {
+    public String deactivateUser(Integer id) {
         try {
             User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
             if (!user.isActivo()) {
@@ -109,14 +48,27 @@ public class UserService {
             }
             user.setActivo(false);
             userRepository.save(user);
-            return "Se eliminó el usuario";
+            return "Se desactivo el usuario";
         } catch (Exception e) {
-            throw new RuntimeException("No se pudo eliminar el usuario");
+            throw new RuntimeException("No se pudo desactivar el usuario" + e.getMessage());
         }
     }
 
-    public String exportar() {
-        return "Pdf generado correctamente";
+    public String reactivateUser(Integer id) {
+        try {
+            User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+            if (user.isActivo()) {
+                return "Usuario ya está activo";
+            }
+            user.setActivo(true);
+            userRepository.save(user);
+            return "Se reactivo el usuario";
+        } catch (Exception e) {
+            throw new RuntimeException("No se pudo reactivar el usuario" + e.getMessage());
+        }
     }
 
+    // public String exportar() {
+    // return "Pdf generado correctamente";
+    // }
 }
