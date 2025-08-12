@@ -41,6 +41,7 @@ public class User implements UserDetails {
     private String rfc;
     private String cedulaProfesional;
     private String especialidad;
+    @Column(nullable = false)
     private String password;
     private String telefono;
     private String facultad;
@@ -79,7 +80,7 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         // TODO Auto-generated method stub
-        return UserDetails.super.isEnabled();
+        return this.activo;
     }
 
     @Override

@@ -1,5 +1,9 @@
 package com.uv.api_expedientes.AccessControl.Recursos;
 
-public class RecursoRepository {
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface RecursoRepository extends CrudRepository<Recurso, Integer> {
 
 }

@@ -34,7 +34,7 @@ public class AuthService {
 
                 UserDetails user = userRepository.findByUsername(loginDto.getUsername()).orElseThrow();
 
-                String token = "";
+                String token = "Este es un token simulado"; // jwtService.getToken(user);
                 // String token = jwtService.getToken(user);
 
                 return token;

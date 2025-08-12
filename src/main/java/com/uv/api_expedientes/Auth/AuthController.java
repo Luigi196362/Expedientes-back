@@ -18,11 +18,10 @@ public class AuthController {
 
     private final AuthService authService;
 
-    // @PostMapping("login")
-    // public ResponseEntity<String> login(@RequestBody LoginDto loginDto) {
-    // String token = "";
-    // return ResponseEntity.ok(token);
-    // }
+    @PostMapping("login")
+    public ResponseEntity<String> login(@RequestBody LoginDto loginDto) {
+        return ResponseEntity.ok(authService.login(loginDto));
+    }
 
     @PostMapping("/register")
     public ResponseEntity<Void> register(@RequestBody RegisterUserDto registerUserDto) {
