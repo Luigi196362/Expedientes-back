@@ -6,8 +6,10 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.uv.api_expedientes.AccessControl.Permisos.Permiso;
 import com.uv.api_expedientes.AccessControl.Roles.Rol;
 
 import jakarta.persistence.Column;
@@ -55,6 +57,18 @@ public class User implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> authorities = new ArrayList<>();
+
+        // Agregar el rol como autoridad principal
+        authorities.add(new SimpleGrantedAuthority("ROLE_" + rol.getNombre().toUpperCase()));
+
+        // Agregar los permisos asociados al rol
+        if (rol.getPermisos() != null) {
+            for (Permiso permiso : rol.getPermisos()) {
+                String authority = permiso.getRecurso().getNombre().toUpperCase() + "_" +
+                        permiso.getAccion().getNombre().toUpperCase();
+                authorities.add(new SimpleGrantedAuthority(authority));
+            }
+        }
 
         return authorities;
     }

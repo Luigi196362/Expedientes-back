@@ -21,33 +21,33 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PutMapping;
 
 @RestController
-@RequestMapping("/roles")
+@RequestMapping("/api/roles")
 @RequiredArgsConstructor
 public class RolController {
 
     private final RolService rolService;
 
-    @GetMapping()
+    @GetMapping("/Ver")
     public ResponseEntity<List<AllRolesDto>> getAllRoles() {
         return ResponseEntity.ok(rolService.getAllRoles());
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/Ver/{id}")
     public ResponseEntity<IdRolDto> getRolById(@PathVariable("id") Integer id) {
         return ResponseEntity.ok(rolService.getRolById(id));
     }
 
-    @PostMapping()
+    @PostMapping("/Crear")
     public ResponseEntity<Void> createRol(@RequestBody CreateRolDto createRolDto) {
         return ResponseEntity.ok(rolService.createRol(createRolDto));
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/Eliminar/{id}")
     public ResponseEntity<Void> deleteRol(@PathVariable("id") Integer id) {
         return ResponseEntity.ok(rolService.deleteRol(id));
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/Editar/{id}")
     public ResponseEntity<Void> updateRol(@PathVariable("id") Integer id, @RequestBody CreateRolDto createRolDto) {
         return ResponseEntity.ok(rolService.updateRol(id, createRolDto));
     }

@@ -14,6 +14,7 @@ import com.uv.api_expedientes.Auth.dtos.LoginDto;
 import com.uv.api_expedientes.Auth.dtos.RegisterUserDto;
 import com.uv.api_expedientes.Users.User;
 import com.uv.api_expedientes.Users.UserRepository;
+import com.uv.api_expedientes.jwt.JwtService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -21,6 +22,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AuthService {
 
+        private final JwtService jwtService;
         private final AuthenticationManager authenticationManager;
         private final UserRepository userRepository;
         private final RolRepository rolRepository;
@@ -34,8 +36,7 @@ public class AuthService {
 
                 UserDetails user = userRepository.findByUsername(loginDto.getUsername()).orElseThrow();
 
-                String token = "Este es un token simulado"; // jwtService.getToken(user);
-                // String token = jwtService.getToken(user);
+                String token = jwtService.getToken(user);
 
                 return token;
         }
@@ -63,21 +64,5 @@ public class AuthService {
                 userRepository.save(user);
                 return null;
         }
-
-        // private final JwtService jwtService;
-
-        // public AuthResponse login(LoginRequest request) {
-        // authenticationManager.authenticate(
-        // new UsernamePasswordAuthenticationToken(request.getUsername(),
-        // request.getPassword()));
-        // UserDetails user =
-        // userRepository.findByUsername(request.getUsername()).orElseThrow();
-        // String token = jwtService.getToken(user);
-
-        // return AuthResponse.builder()
-        // .token(token)
-        // .build();
-
-        // }
 
 }
