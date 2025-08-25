@@ -41,7 +41,7 @@ public class ApplicationConfig {
 
     @Bean
     public UserDetailsService userDetailService() {
-        return username -> userRepository.findByUsername(username)
+        return username -> userRepository.findByMatricula(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not fournd"));
     }
 

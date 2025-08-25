@@ -1,6 +1,8 @@
 package com.uv.api_expedientes.Auth;
 
+import java.util.Calendar;
 import java.util.Date;
+import java.util.UUID;
 
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -29,26 +31,28 @@ public class AuthService {
         private final PasswordEncoder passwordEncoder;
 
         public String login(LoginDto loginDto) {
-
+                System.out.println("Login attempt for matricula: " + loginDto.getMatricula());
                 authenticationManager.authenticate(
-                                new UsernamePasswordAuthenticationToken(loginDto.getUsername(),
+                                new UsernamePasswordAuthenticationToken(loginDto.getMatricula(),
                                                 loginDto.getPassword()));
-
-                UserDetails user = userRepository.findByUsername(loginDto.getUsername()).orElseThrow();
-
+                System.out.println("Authentication successful for matricula: " + loginDto.getMatricula());
+                UserDetails user = userRepository.findByMatricula(loginDto.getMatricula()).orElseThrow();
+                System.out.println(user.getUsername());
                 String token = jwtService.getToken(user);
 
                 return token;
         }
 
-        public Void register(RegisterUserDto registerUserDto) {
+        public String register(RegisterUserDto registerUserDto) {
 
                 Rol rol = rolRepository.findById(registerUserDto.getRolId())
                                 .orElseThrow(() -> new RuntimeException(
                                                 "Rol no encontrado con el ID: " + registerUserDto.getRolId()));
 
+                String matricula = MatriculaGenerator.generarMatricula(registerUserDto.getUsername());
+
                 User user = User.builder()
-                                .matricula(registerUserDto.getMatricula())
+                                .matricula(matricula)
                                 .username(registerUserDto.getUsername())
                                 .curp(registerUserDto.getCurp())
                                 .rfc(registerUserDto.getRfc())
@@ -61,8 +65,26 @@ public class AuthService {
                                 .fecha_creacion(new Date())
                                 .rol(rol)
                                 .build();
+
                 userRepository.save(user);
-                return null;
+                return matricula;
         }
 
+        public class MatriculaGenerator {
+
+                private static final String PREFIJO = "UV";
+
+                public static String generarMatricula(String username) {
+
+                        int year = Calendar.getInstance().get(Calendar.YEAR);
+
+                        String letras = username.length() >= 3
+                                        ? username.substring(0, 3).toUpperCase()
+                                        : String.format("%-3s", username).replace(' ', 'X').toUpperCase();
+
+                        String hash = UUID.randomUUID().toString().replace("-", "").substring(0, 4).toUpperCase();
+
+                        return String.format("%s%d%s%s", PREFIJO, year, letras, hash);
+                }
+        }
 }
