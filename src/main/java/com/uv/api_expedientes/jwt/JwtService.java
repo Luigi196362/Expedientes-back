@@ -53,6 +53,7 @@ public class JwtService {
 
     private String generateToken(Map<String, Object> extraClaims, UserDetails user) {
         return Jwts.builder()
+                // Se añaden los permisos y el rol al token unicamente para ajustar el frontend
                 .setClaims(extraClaims)
                 .setSubject(user.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))

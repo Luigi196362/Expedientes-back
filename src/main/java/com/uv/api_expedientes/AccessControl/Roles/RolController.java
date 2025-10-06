@@ -4,6 +4,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.uv.api_expedientes.AccessControl.Roles.dtos.IdRolDto;
+import com.uv.api_expedientes.AccessControl.Roles.dtos.RolNamesResponseDTO;
 
 import lombok.RequiredArgsConstructor;
 
@@ -35,6 +36,11 @@ public class RolController {
     @GetMapping("/Ver/{id}")
     public ResponseEntity<IdRolDto> getRolById(@PathVariable("id") Integer id) {
         return ResponseEntity.ok(rolService.getRolById(id));
+    }
+
+    @GetMapping("/Ver/Nombres")
+    public List<RolNamesResponseDTO> obtenerNombresRoles() {
+        return rolService.obtenerNombresRoles();
     }
 
     @PostMapping("/Crear")

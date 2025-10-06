@@ -40,4 +40,10 @@ public class Rol {
     @OneToMany(mappedBy = "rol", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Permiso> permisos;
 
+    public Rol(String nombre, String descripcion) {
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+        this.activo = true;
+        this.fecha_creacion = new Date();
+    }
 }

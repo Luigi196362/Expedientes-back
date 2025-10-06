@@ -1,15 +1,17 @@
-package com.uv.api_expedientes.Auth.dtos;
+package com.uv.api_expedientes.Users.dtos;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import java.util.Date;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class RegisterUserDto {
+public class UserEditDto {
+    private String username;
     private String nombre;
     private String curp;
     private String rfc;
@@ -18,5 +20,7 @@ public class RegisterUserDto {
     private String password;
     private String telefono;
     private String facultad;
+    private Date fecha_creacion;
     private Integer rolId;
+
 }

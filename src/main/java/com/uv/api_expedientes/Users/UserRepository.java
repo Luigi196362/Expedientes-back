@@ -11,6 +11,4 @@ public interface UserRepository extends CrudRepository<User, Integer> {
     List<User> findByActivoTrue();
 
     Optional<User> findByUsername(String username);
-
-    Optional<User> findByMatricula(String matricula);
 }

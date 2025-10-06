@@ -1,0 +1,51 @@
+package com.uv.api_expedientes.Pacientes;
+
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.uv.api_expedientes.Pacientes.dtos.AllPacientesDto;
+import com.uv.api_expedientes.Pacientes.dtos.PacienteEditDto;
+
+@RestController
+@RequestMapping("/api/pacientes")
+public class PacienteController {
+
+    @Autowired
+    PacienteService pacienteService;
+
+    @GetMapping("/Ver")
+    public AllPacientesDto obtenerPacientes() {
+        return pacienteService.obtenerPacientes();
+    }
+
+    @PostMapping("/Crear")
+    public ResponseEntity<Void> guardarPaciente(@RequestBody Paciente paciente) {
+        return ResponseEntity.ok(pacienteService.guardarPaciente(paciente));
+    }
+
+    @GetMapping("/Ver/{id}")
+    public ResponseEntity<Optional<Paciente>> obtenerPorId(@PathVariable("id") int id) {
+        return ResponseEntity.ok(pacienteService.obtenerPorId(id));
+    }
+
+    @PutMapping("/Editar/{id}")
+    public ResponseEntity<Void> actualizarPaciente(@PathVariable("id") int id,
+            @RequestBody PacienteEditDto pacienteEditDto) {
+        return ResponseEntity.ok(pacienteService.actualizarPaciente(id, pacienteEditDto));
+    }
+
+    @DeleteMapping("/Eliminar/{id}")
+    public ResponseEntity<String> desactivarPaciente(@PathVariable("id") int id) {
+        return ResponseEntity.ok(pacienteService.desactivarPaciente(id));
+    }
+}

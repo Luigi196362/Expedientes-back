@@ -1,4 +1,4 @@
-package com.uv.api_expedientes.AccessControl.Roles.dtos;
+package com.uv.api_expedientes.Registro.dtos;
 
 import java.util.Date;
 
@@ -11,10 +11,11 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class AllRolesDto {
-    private Integer id;
-    private String nombre;
-    private String descripcion;
+public class RegistroDTO {
+    private String usuario;
+    private String paciente;
     private Date fecha_creacion;
-    // private List<PermisosDto> Permisos;
+    private String tipo_registro;
+    // private Long idRegistro;
+
 }

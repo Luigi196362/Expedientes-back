@@ -1,4 +1,4 @@
-package com.uv.api_expedientes.Auth.dtos;
+package com.uv.api_expedientes.Users.dtos;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -6,10 +6,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@Builder
-@NoArgsConstructor
 @AllArgsConstructor
-public class LoginDto {
-    String username;
-    String password;
+@NoArgsConstructor
+@Builder
+public class MatriculaDto {
+    String matricula;
 }

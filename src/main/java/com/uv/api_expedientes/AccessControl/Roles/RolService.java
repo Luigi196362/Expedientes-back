@@ -6,10 +6,13 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
 import com.uv.api_expedientes.AccessControl.Roles.dtos.IdRolDto;
+import com.uv.api_expedientes.AccessControl.Roles.dtos.RolNamesResponseDTO;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -39,19 +42,27 @@ public class RolService {
         List<AllRolesDto> allRolesDtos = new ArrayList<>();
 
         for (Rol rol : roles) {
-            List<PermisosDto> permisosDtos = ObtenerPermisosPorRol(rol.getId());
+            // List<PermisosDto> permisosDtos = ObtenerPermisosPorRol(rol.getId());
             AllRolesDto allRolesDto = AllRolesDto.builder()
                     .id(rol.getId())
                     .nombre(rol.getNombre())
                     .descripcion(rol.getDescripcion())
                     .fecha_creacion(rol.getFecha_creacion())
-                    .Permisos(permisosDtos)
+                    // .Permisos(permisosDtos)
                     .build();
             allRolesDtos.add(allRolesDto);
 
         }
 
         return allRolesDtos;
+    }
+
+    public List<RolNamesResponseDTO> obtenerNombresRoles() {
+        List<Rol> roles = (List<Rol>) rolRepository.findAll();
+
+        return roles.stream()
+                .map(rol -> new RolNamesResponseDTO(rol.getId(), rol.getNombre()))
+                .collect(Collectors.toList());
     }
 
     public IdRolDto getRolById(Integer id) {
@@ -113,13 +124,16 @@ public class RolService {
 
     @Transactional
     public Void updateRol(Integer id, CreateRolDto createRolDto) {
-        System.out.println("Permisos antes de borrar: " + permisoRepository.findByRol_Id(id).size());
+        // System.out.println("Permisos antes de borrar: " +
+        // permisoRepository.findByRol_Id(id).size());
 
+        // Eliminar permisos existentes del rol
         permisoRepository.deleteByRolId(id);
 
         Rol rol = rolRepository.findById(id).orElseThrow(() -> new RuntimeException("Rol not found with id: " + id));
-        rol.setNombre(createRolDto.getNombre());
-        rol.setDescripcion(createRolDto.getDescripcion());
+
+        Optional.ofNullable(createRolDto.getNombre()).ifPresent(rol::setNombre);
+        Optional.ofNullable(createRolDto.getDescripcion()).ifPresent(rol::setDescripcion);
         rolRepository.save(rol);
 
         if (createRolDto.getPermisos() != null) {

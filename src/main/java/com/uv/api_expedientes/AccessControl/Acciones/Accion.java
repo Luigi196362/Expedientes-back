@@ -24,4 +24,9 @@ public class Accion {
     private Integer id;
     private String nombre;
     private String descripcion;
+
+    public Accion(String nombre, String descripcion) {
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+    }
 }

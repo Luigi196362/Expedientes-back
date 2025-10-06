@@ -1,4 +1,4 @@
-package com.uv.api_expedientes.Auth.dtos;
+package com.uv.api_expedientes.AccessControl.Roles.dtos;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -6,10 +6,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class LoginDto {
-    String username;
-    String password;
+@Builder
+public class RolNamesResponseDTO {
+    private Integer id;
+    private String nombre;
+
 }

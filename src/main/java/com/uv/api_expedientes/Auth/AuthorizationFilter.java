@@ -76,12 +76,13 @@ public class AuthorizationFilter extends OncePerRequestFilter {
 
         List<String> accionesPermitidas = permisos.get(recurso.toLowerCase());
 
-        System.out.println("🔍 Recurso solicitado: " + recurso.toLowerCase());
-        System.out.println("🔍 Acción solicitada: " + accion.toLowerCase());
-        System.out.println("🔍 Permisos del usuario: " + permisos);
+        // System.out.println("Recurso solicitado: " + recurso.toLowerCase());
+        // System.out.println("Acción solicitada: " + accion.toLowerCase());
+        // System.out.println("Permisos del usuario: " + permisos);
 
         if (accionesPermitidas == null || !accionesPermitidas.contains(accion.toLowerCase())) {
-            System.out.println("🚫 Acciones permitidas para " + recurso.toLowerCase() + ": " + accionesPermitidas);
+            // System.out.println("Acciones permitidas para " + recurso.toLowerCase() + ": "
+            // + accionesPermitidas);
 
             response.setContentType("application/json");
             response.setStatus(HttpStatus.FORBIDDEN.value());

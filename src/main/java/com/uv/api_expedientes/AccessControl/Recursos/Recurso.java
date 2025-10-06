@@ -24,4 +24,9 @@ public class Recurso {
     private Integer id;
     private String nombre;
     private String descripcion;
+
+    public Recurso(String nombre, String descripcion) {
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+    }
 }

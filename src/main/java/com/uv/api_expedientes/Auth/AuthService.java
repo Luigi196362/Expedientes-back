@@ -12,10 +12,12 @@ import org.springframework.stereotype.Service;
 
 import com.uv.api_expedientes.AccessControl.Roles.Rol;
 import com.uv.api_expedientes.AccessControl.Roles.RolRepository;
+import com.uv.api_expedientes.Auth.dtos.AuthResponse;
 import com.uv.api_expedientes.Auth.dtos.LoginDto;
 import com.uv.api_expedientes.Auth.dtos.RegisterUserDto;
 import com.uv.api_expedientes.Users.User;
 import com.uv.api_expedientes.Users.UserRepository;
+import com.uv.api_expedientes.Users.dtos.MatriculaDto;
 import com.uv.api_expedientes.jwt.JwtService;
 
 import lombok.RequiredArgsConstructor;
@@ -30,30 +32,35 @@ public class AuthService {
         private final RolRepository rolRepository;
         private final PasswordEncoder passwordEncoder;
 
-        public String login(LoginDto loginDto) {
-                System.out.println("Login attempt for matricula: " + loginDto.getMatricula());
+        public AuthResponse login(LoginDto loginDto) {
+                // System.out.println("Login attempt for matricula: " + loginDto.getUsername());
                 authenticationManager.authenticate(
-                                new UsernamePasswordAuthenticationToken(loginDto.getMatricula(),
+                                new UsernamePasswordAuthenticationToken(loginDto.getUsername(),
                                                 loginDto.getPassword()));
-                System.out.println("Authentication successful for matricula: " + loginDto.getMatricula());
-                UserDetails user = userRepository.findByMatricula(loginDto.getMatricula()).orElseThrow();
-                System.out.println(user.getUsername());
+                // System.out.println("Authentication successful for matricula: " +
+                // loginDto.getUsername());
+                UserDetails user = userRepository.findByUsername(loginDto.getUsername()).orElseThrow();
+                String Nombre = userRepository.findByUsername(loginDto.getUsername()).get().getNombre();
+                // System.out.println(user.getUsername());
                 String token = jwtService.getToken(user);
+                return AuthResponse.builder()
+                                .token(token)
+                                .nombre(Nombre)
+                                .build();
 
-                return token;
         }
 
-        public String register(RegisterUserDto registerUserDto) {
+        public MatriculaDto register(RegisterUserDto registerUserDto) {
 
                 Rol rol = rolRepository.findById(registerUserDto.getRolId())
                                 .orElseThrow(() -> new RuntimeException(
                                                 "Rol no encontrado con el ID: " + registerUserDto.getRolId()));
 
-                String matricula = MatriculaGenerator.generarMatricula(registerUserDto.getUsername());
+                String matricula = MatriculaGenerator.generarMatricula(registerUserDto.getNombre());
 
                 User user = User.builder()
-                                .matricula(matricula)
-                                .username(registerUserDto.getUsername())
+                                .username(matricula)
+                                .nombre(registerUserDto.getNombre())
                                 .curp(registerUserDto.getCurp())
                                 .rfc(registerUserDto.getRfc())
                                 .cedulaProfesional(registerUserDto.getCedulaProfesional())
@@ -67,7 +74,8 @@ public class AuthService {
                                 .build();
 
                 userRepository.save(user);
-                return matricula;
+                return MatriculaDto.builder()
+                                .matricula(matricula).build();
         }
 
         public class MatriculaGenerator {

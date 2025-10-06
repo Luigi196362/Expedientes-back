@@ -37,8 +37,8 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(unique = true, nullable = false)
     private Integer id;
-    private String matricula;
     private String username;
+    private String nombre;
     private String curp;
     private String rfc;
     private String cedulaProfesional;
@@ -99,7 +99,7 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return this.matricula;
+        return this.username;
     }
 
 }
