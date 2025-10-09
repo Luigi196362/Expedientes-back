@@ -1,8 +1,5 @@
 package com.uv.api_expedientes.Pacientes;
 
-import java.util.Optional;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,14 +11,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.uv.api_expedientes.Pacientes.dtos.AllPacientesDto;
+import com.uv.api_expedientes.Pacientes.dtos.IdPacienteDto;
 import com.uv.api_expedientes.Pacientes.dtos.PacienteEditDto;
+
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/pacientes")
+@RequiredArgsConstructor
 public class PacienteController {
 
-    @Autowired
-    PacienteService pacienteService;
+    private final PacienteService pacienteService;
 
     @GetMapping("/Ver")
     public AllPacientesDto obtenerPacientes() {
@@ -34,7 +34,7 @@ public class PacienteController {
     }
 
     @GetMapping("/Ver/{id}")
-    public ResponseEntity<Optional<Paciente>> obtenerPorId(@PathVariable("id") int id) {
+    public ResponseEntity<IdPacienteDto> obtenerPorId(@PathVariable("id") int id) {
         return ResponseEntity.ok(pacienteService.obtenerPorId(id));
     }
 

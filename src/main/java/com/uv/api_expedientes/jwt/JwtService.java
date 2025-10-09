@@ -5,8 +5,10 @@ import java.security.SecureRandom;
 import java.util.*;
 import java.util.function.Function;
 
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import com.uv.api_expedientes.AccessControl.Permisos.Permiso;
 import com.uv.api_expedientes.Users.User;
@@ -15,6 +17,7 @@ import io.jsonwebtoken.*;
 
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import jakarta.servlet.http.HttpServletRequest;
 
 @Service
 public class JwtService {
@@ -70,6 +73,15 @@ public class JwtService {
 
     public String getUsernameFromToken(String token) {
         return getClaim(token, Claims::getSubject);
+    }
+
+    public String getTokenFromRequest(HttpServletRequest request) {
+        final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
+
+        if (StringUtils.hasText(authHeader) && authHeader.startsWith("Bearer ")) {
+            return authHeader.substring(7);
+        }
+        return null;
     }
 
     public boolean isTokenValid(String token, UserDetails userDetails) {

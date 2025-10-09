@@ -1,7 +1,6 @@
 package com.uv.api_expedientes.Notas.HistoriaClinica;
 
-import com.uv.api_expedientes.Registro.Registro;
-
+import java.util.Date;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -14,13 +13,15 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import com.uv.api_expedientes.Pacientes.Paciente;
+import com.uv.api_expedientes.Users.User;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "HistoriaClinica")
+@Table(name = "historia_clinica")
 public class HistoriaClinica {
 
     @Id
@@ -29,8 +30,12 @@ public class HistoriaClinica {
     private int id;
 
     @ManyToOne
-    @JoinColumn(name = "registro_id")
-    private Registro registro;
+    @JoinColumn(name = "usuario_id")
+    private User usuario;
+
+    @ManyToOne
+    @JoinColumn(name = "paciente_id")
+    private Paciente paciente;
 
     private String antecedentes_heredo_familiares;
     private String antecedentes_personales_no_patologicos;
@@ -40,5 +45,6 @@ public class HistoriaClinica {
     private String tratamiento;
     private String observaciones;
     private String alergias;
+    private Date fecha_creacion;
 
 }

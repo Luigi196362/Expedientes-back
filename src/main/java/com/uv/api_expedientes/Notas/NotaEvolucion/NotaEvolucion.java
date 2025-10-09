@@ -1,6 +1,9 @@
 package com.uv.api_expedientes.Notas.NotaEvolucion;
 
-import com.uv.api_expedientes.Registro.Registro;
+import java.util.Date;
+
+import com.uv.api_expedientes.Pacientes.Paciente;
+import com.uv.api_expedientes.Users.User;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -20,17 +23,21 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "NotaEvolucion")
+@Table(name = "notas_evolucion")
 public class NotaEvolucion {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(unique = true, nullable = false)
-    private int id;
+    private Integer id;
 
     @ManyToOne
-    @JoinColumn(name = "registro_id")
-    private Registro registro;
+    @JoinColumn(name = "usuario_id")
+    private User usuario;
+
+    @ManyToOne
+    @JoinColumn(name = "paciente_id")
+    private Paciente paciente;
 
     private String interrogatorio;
     private int peso;
@@ -50,5 +57,5 @@ public class NotaEvolucion {
     private String plan;
     private String diagnostico;
     private String tratamiento;
-
+    private Date fecha_creacion;
 }

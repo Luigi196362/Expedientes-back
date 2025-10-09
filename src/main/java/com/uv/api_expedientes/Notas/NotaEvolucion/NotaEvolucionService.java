@@ -2,58 +2,45 @@ package com.uv.api_expedientes.Notas.NotaEvolucion;
 
 import java.util.Date;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.uv.api_expedientes.Pacientes.Paciente;
 import com.uv.api_expedientes.Pacientes.PacienteRepository;
-import com.uv.api_expedientes.Registro.Registro;
-import com.uv.api_expedientes.Registro.RegistroRepository;
 import com.uv.api_expedientes.Users.User;
 import com.uv.api_expedientes.Users.UserRepository;
+import com.uv.api_expedientes.jwt.JwtService;
+
+import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
 
 @Service
+@RequiredArgsConstructor
 public class NotaEvolucionService {
 
-    @Autowired
-    NotaEvolucionRepository notaEvolucionRepository;
+    private final NotaEvolucionRepository notaEvolucionRepository;
 
-    @Autowired
-    UserRepository usuarioRepository;
+    private final UserRepository usuarioRepository;
 
-    @Autowired
-    PacienteRepository pacienteRepository;
+    private final PacienteRepository pacienteRepository;
 
-    @Autowired
-    RegistroRepository registroRepository;
+    private final JwtService jwtService;
 
-    // public ArrayList<NotaEvolucion> obtenerNotas() {
-    // return (ArrayList<NotaEvolucion>) notaEvolucionRepository.findAll();
-    // }
+    public String guardarNota(HttpServletRequest request, Integer idPaciente,
+            NotaEvolucion notaEvolucion) {
 
-    // public Optional<NotaEvolucion> obtenerPorId(Long id) {
-    // return notaEvolucionRepository.findById(id);
-    // }
-
-    public String guardarNota(String Username, int idPaciente, NotaEvolucion notaEvolucion) {
-
-        Registro nuevoRegistro = new Registro();
         NotaEvolucion nuevaNotaEvolucion = new NotaEvolucion();
+
+        String Username = jwtService.getUsernameFromToken(jwtService.getTokenFromRequest(request));
 
         User usuario = usuarioRepository.findByUsername(Username)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
-        nuevoRegistro.setUsuario(usuario);
-
-        nuevoRegistro.setFecha_creacion(new Date());
-        nuevoRegistro.setTipoRegistro("Nota de evolución");
-
         Paciente pacienteRegistro = pacienteRepository.findById(idPaciente)
                 .orElseThrow(() -> new RuntimeException("Paciente no encontrado"));
-        nuevoRegistro.setPaciente(pacienteRegistro);
 
-        Registro registroGuardado = registroRepository.save(nuevoRegistro);
-
+        nuevaNotaEvolucion.setUsuario(usuario);
+        nuevaNotaEvolucion.setPaciente(pacienteRegistro);
+        nuevaNotaEvolucion.setFecha_creacion(new Date());
         nuevaNotaEvolucion.setInterrogatorio(notaEvolucion.getInterrogatorio());
         nuevaNotaEvolucion.setPeso(notaEvolucion.getPeso());
         nuevaNotaEvolucion.setTalla(notaEvolucion.getTalla());
@@ -72,7 +59,6 @@ public class NotaEvolucionService {
         nuevaNotaEvolucion.setPlan(notaEvolucion.getPlan());
         nuevaNotaEvolucion.setDiagnostico(notaEvolucion.getDiagnostico());
         nuevaNotaEvolucion.setTratamiento(notaEvolucion.getTratamiento());
-        nuevaNotaEvolucion.setRegistro(registroGuardado);
         notaEvolucionRepository.save(nuevaNotaEvolucion);
         return "Registro con éxito";
     }

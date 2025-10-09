@@ -3,7 +3,6 @@ package com.uv.api_expedientes.Notas.NotaEvolucion;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,31 +10,22 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
+
 @RestController
 @RequestMapping("/api/registros")
+@RequiredArgsConstructor
 public class NotaEvolucionController {
 
-    @Autowired
-    NotaEvolucionService notaEvolucionService;
+    private final NotaEvolucionService notaEvolucionService;
 
-    // @GetMapping()
-    // public ArrayList<NotaEvolucion> obtenerNotas() {
-    // return notaEvolucionService.obtenerNotas();
-    // }
-
-    // @GetMapping(path = "/{id}")
-    // public Optional<NotaEvolucion> obtenerPorId(@PathVariable("id") Long id) {
-    // return this.notaEvolucionService.obtenerPorId(id);
-    // }
-
-    @PostMapping(path = "/crear/nota/{Username}/{idPaciente}")
-    public ResponseEntity<Map<String, String>> guardarNota(@PathVariable String Username,
-            @PathVariable int idPaciente, @RequestBody NotaEvolucion notaEvolucion) {
-        this.notaEvolucionService.guardarNota(Username, idPaciente, notaEvolucion);
+    @PostMapping("/Crear/Nota/{idPaciente}")
+    public ResponseEntity<Map<String, String>> crearHistoria(HttpServletRequest request,
+            @PathVariable Integer idPaciente,
+            @RequestBody NotaEvolucion notaEvolucion) {
         Map<String, String> response = new HashMap<>();
-        response.put("mensaje", "Registro exitoso");
-
+        response.put("mensaje", notaEvolucionService.guardarNota(request, idPaciente, notaEvolucion));
         return ResponseEntity.ok(response);
     }
-
 }

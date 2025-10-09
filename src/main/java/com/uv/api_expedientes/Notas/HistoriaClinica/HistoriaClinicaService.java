@@ -2,64 +2,56 @@ package com.uv.api_expedientes.Notas.HistoriaClinica;
 
 import java.util.Date;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.uv.api_expedientes.Pacientes.Paciente;
 import com.uv.api_expedientes.Pacientes.PacienteRepository;
-import com.uv.api_expedientes.Registro.Registro;
-import com.uv.api_expedientes.Registro.RegistroRepository;
 import com.uv.api_expedientes.Users.User;
 import com.uv.api_expedientes.Users.UserRepository;
+import com.uv.api_expedientes.jwt.JwtService;
+
+import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
 
 @Service
+@RequiredArgsConstructor
 public class HistoriaClinicaService {
 
-        @Autowired
-        HistoriaClinicaRepository historiaClinicaRepository;
+        private final HistoriaClinicaRepository historiaClinicaRepository;
 
-        @Autowired
-        UserRepository usuarioRepository;
+        private final UserRepository usuarioRepository;
 
-        @Autowired
-        PacienteRepository pacienteRepository;
+        private final PacienteRepository pacienteRepository;
 
-        @Autowired
-        RegistroRepository registroRepository;
+        private final JwtService jwtService;
 
-        public String guardarHistoria(String Username, int idPaciente, HistoriaClinica historiaClinica) {
+        public String guardarHistoria(HttpServletRequest request, int idPaciente,
+                        HistoriaClinica historiaClinica) {
 
-                Registro nuevoRegistro = new Registro();
                 HistoriaClinica nuevaHistoriaClinica = new HistoriaClinica();
+
+                String Username = jwtService.getUsernameFromToken(jwtService.getTokenFromRequest(request));
 
                 User usuario = usuarioRepository.findByUsername(Username)
                                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
-                nuevoRegistro.setUsuario(usuario);
-
-                nuevoRegistro.setFecha_creacion(new Date());
-                nuevoRegistro.setTipoRegistro("Historia clínica");
-
                 Paciente pacienteRegistro = pacienteRepository.findById(idPaciente)
                                 .orElseThrow(() -> new RuntimeException("Paciente no encontrado"));
-                nuevoRegistro.setPaciente(pacienteRegistro);
 
-                Registro registroGuardado = registroRepository.save(nuevoRegistro);
-
+                nuevaHistoriaClinica.setUsuario(usuario);
+                nuevaHistoriaClinica.setPaciente(pacienteRegistro);
+                nuevaHistoriaClinica.setFecha_creacion(new Date());
                 nuevaHistoriaClinica
                                 .setAntecedentes_heredo_familiares(historiaClinica.getAntecedentes_heredo_familiares());
-                nuevaHistoriaClinica
-                                .setAntecedentes_personales_no_patologicos(
-                                                historiaClinica.getAntecedentes_personales_no_patologicos());
-                nuevaHistoriaClinica
-                                .setAntecedentes_personales_patologicos(
-                                                historiaClinica.getAntecedentes_personales_patologicos());
+                nuevaHistoriaClinica.setAntecedentes_personales_no_patologicos(
+                                historiaClinica.getAntecedentes_personales_no_patologicos());
+                nuevaHistoriaClinica.setAntecedentes_personales_patologicos(
+                                historiaClinica.getAntecedentes_personales_patologicos());
                 nuevaHistoriaClinica.setMedicamentos_actuales(historiaClinica.getMedicamentos_actuales());
                 nuevaHistoriaClinica.setDiagnostico_inicial(historiaClinica.getDiagnostico_inicial());
                 nuevaHistoriaClinica.setTratamiento(historiaClinica.getTratamiento());
                 nuevaHistoriaClinica.setObservaciones(historiaClinica.getObservaciones());
                 nuevaHistoriaClinica.setAlergias(historiaClinica.getAlergias());
-                nuevaHistoriaClinica.setRegistro(registroGuardado);
                 historiaClinicaRepository.save(nuevaHistoriaClinica);
 
                 return "Registro con éxito";
