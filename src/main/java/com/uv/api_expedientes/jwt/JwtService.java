@@ -24,6 +24,10 @@ public class JwtService {
 
     private static final String SECRET_KEY = generateSecretKeyBase64();
 
+    // ============================
+    // TOKENS PRINCIPALES
+    // ============================
+
     public String getToken(UserDetails userDetails) {
         if (userDetails instanceof User) {
             User user = (User) userDetails;
@@ -60,8 +64,20 @@ public class JwtService {
                 .setClaims(extraClaims)
                 .setSubject(user.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24)) // 24 horas
-                // .setExpiration(new Date(System.currentTimeMillis() + 10000)) // 10 seconds
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60))
+                .signWith(getKey(), SignatureAlgorithm.HS256)
+                .compact();
+    }
+
+    // ============================
+    // REFRESH TOKEN
+    // ============================
+
+    public String generateRefreshToken(UserDetails user) {
+        return Jwts.builder()
+                .setSubject(user.getUsername())
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 2))
                 .signWith(getKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
@@ -103,11 +119,19 @@ public class JwtService {
     }
 
     private Claims getAllClaims(String token) {
-        return Jwts.parserBuilder()
-                .setSigningKey(getKey())
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
+        try {
+            return Jwts.parserBuilder()
+                    .setSigningKey(getKey())
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody();
+        } catch (ExpiredJwtException e) {
+            throw new RuntimeException("El token ha expirado");
+        } catch (SignatureException e) {
+            throw new RuntimeException("Firma JWT inválida");
+        } catch (JwtException e) {
+            throw new RuntimeException("Token JWT inválido o corrupto");
+        }
     }
 
     public <T> T getClaim(String token, Function<Claims, T> claimsResolver) {

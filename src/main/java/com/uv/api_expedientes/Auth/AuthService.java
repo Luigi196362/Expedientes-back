@@ -14,12 +14,14 @@ import com.uv.api_expedientes.AccessControl.Roles.Rol;
 import com.uv.api_expedientes.AccessControl.Roles.RolRepository;
 import com.uv.api_expedientes.Auth.dtos.AuthResponse;
 import com.uv.api_expedientes.Auth.dtos.LoginDto;
+import com.uv.api_expedientes.Auth.dtos.RefreshTokenRequest;
 import com.uv.api_expedientes.Auth.dtos.RegisterUserDto;
 import com.uv.api_expedientes.Users.User;
 import com.uv.api_expedientes.Users.UserRepository;
 import com.uv.api_expedientes.Users.dtos.MatriculaDto;
 import com.uv.api_expedientes.jwt.JwtService;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -43,9 +45,11 @@ public class AuthService {
                 String Nombre = userRepository.findByUsername(loginDto.getUsername()).get().getNombre();
                 // System.out.println(user.getUsername());
                 String token = jwtService.getToken(user);
+                String refreshToken = jwtService.generateRefreshToken(user);
                 return AuthResponse.builder()
                                 .token(token)
                                 .nombre(Nombre)
+                                .refreshToken(refreshToken)
                                 .build();
 
         }
@@ -76,6 +80,32 @@ public class AuthService {
                 userRepository.save(user);
                 return MatriculaDto.builder()
                                 .matricula(matricula).build();
+        }
+
+        public AuthResponse RefreshToken(HttpServletRequest requestToken, RefreshTokenRequest requestRefresh) {
+                String refreshToken = requestRefresh.getRefreshToken();
+                String AccessToken = jwtService.getTokenFromRequest(requestToken);
+
+                String username = jwtService.getUsernameFromToken(AccessToken);
+                String Nombre = userRepository.findByUsername(username).get().getNombre();
+                var user = userRepository.findByUsername(username)
+                                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
+                if (jwtService.isTokenValid(AccessToken, user)) {
+                        if (jwtService.isTokenValid(refreshToken, user)) {
+                                String newAccessToken = jwtService.getToken(user);
+                                return AuthResponse.builder()
+                                                .token(newAccessToken)
+                                                .nombre(Nombre)
+                                                .refreshToken(refreshToken)
+                                                .build();
+                        } else {
+                                throw new RuntimeException("Refresh token inválido o expirado");
+                        }
+                } else {
+                        throw new RuntimeException("Access token inválido o expirado");
+                }
+
         }
 
         public class MatriculaGenerator {

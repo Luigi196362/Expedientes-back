@@ -35,6 +35,13 @@ public class AuthorizationFilter extends OncePerRequestFilter {
             @NonNull FilterChain filterChain)
             throws ServletException, IOException {
 
+        // Excluir el endpoint de refresh del filtro de permisos
+        String path = request.getRequestURI();
+        if (path.startsWith("/auth/refresh")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         // Obtener el token del encabezado Authorization
         String token = request.getHeader("Authorization");
         if (token == null || !token.startsWith("Bearer ")) {
