@@ -39,7 +39,7 @@ public class PacienteService {
         for (Paciente p : pacientes) {
             AllPacientesDto.PacienteInfo info = new AllPacientesDto.PacienteInfo();
             info.setId(p.getId());
-            info.setMatricula(p.getMatricula());
+            //info.setMatricula(p.getMatricula());
             info.setNombre(p.getNombre());
             info.setSexo(p.getSexo());
             info.setTelefono(p.getTelefono());
@@ -76,6 +76,26 @@ public class PacienteService {
                 .origen(paciente.getOrigen())
                 .estado_civil(paciente.getEstado_civil())
                 .facultad(paciente.getFacultad())
+                .tipo_paciente(paciente.getTipo_paciente())
+                .curp(paciente.getCurp())
+                .email(paciente.getEmail())
+                .calle(paciente.getCalle())
+                .numero_exterior(paciente.getNumero_exterior())
+                .numero_interior(paciente.getNumero_interior())
+                .colonia(paciente.getColonia())
+                .cp(paciente.getCp())
+                .municipio(paciente.getMunicipio())
+                .entidad_federativa(paciente.getEntidad_federativa())
+                .nombre_responsable(paciente.getNombre_responsable())
+                .parentesco_responsable(paciente.getParentesco_responsable())
+                .telefono_responsable(paciente.getTelefono_responsable())
+                .direccion_responsable(paciente.getDireccion_responsable())
+                .numero_personal(paciente.getNumero_personal())
+                .puesto(paciente.getPuesto())
+                .area_adscripcion(paciente.getArea_adscripcion())
+                .tipo_contratacion(paciente.getTipo_contratacion())
+                //.habla_lengua_indigena(paciente.isHabla_lengua_indigena())
+                .lengua_indigena(paciente.getLengua_indigena())
                 .fecha_creacion(new Date())
                 .activo(true)
                 .build();
@@ -107,6 +127,28 @@ public class PacienteService {
         Optional.ofNullable(pacienteEditDto.getOrigen()).ifPresent(paciente::setOrigen);
         Optional.ofNullable(pacienteEditDto.getEstado_civil()).ifPresent(paciente::setEstado_civil);
         Optional.ofNullable(pacienteEditDto.getFacultad()).ifPresent(paciente::setFacultad);
+        
+        Optional.ofNullable(pacienteEditDto.getTipo_paciente()).ifPresent(paciente::setTipo_paciente);
+        Optional.ofNullable(pacienteEditDto.getCurp()).ifPresent(paciente::setCurp);
+        Optional.ofNullable(pacienteEditDto.getEmail()).ifPresent(paciente::setEmail);
+        Optional.ofNullable(pacienteEditDto.getCalle()).ifPresent(paciente::setCalle);
+        Optional.ofNullable(pacienteEditDto.getNumero_exterior()).ifPresent(paciente::setNumero_exterior);
+        Optional.ofNullable(pacienteEditDto.getNumero_interior()).ifPresent(paciente::setNumero_interior);
+        Optional.ofNullable(pacienteEditDto.getColonia()).ifPresent(paciente::setColonia);
+        Optional.ofNullable(pacienteEditDto.getCp()).ifPresent(paciente::setCp);
+        Optional.ofNullable(pacienteEditDto.getMunicipio()).ifPresent(paciente::setMunicipio);
+        Optional.ofNullable(pacienteEditDto.getEntidad_federativa()).ifPresent(paciente::setEntidad_federativa);
+        Optional.ofNullable(pacienteEditDto.getNombre_responsable()).ifPresent(paciente::setNombre_responsable);
+        Optional.ofNullable(pacienteEditDto.getParentesco_responsable()).ifPresent(paciente::setParentesco_responsable);
+        Optional.ofNullable(pacienteEditDto.getTelefono_responsable()).ifPresent(paciente::setTelefono_responsable);
+        Optional.ofNullable(pacienteEditDto.getDireccion_responsable()).ifPresent(paciente::setDireccion_responsable);
+        Optional.ofNullable(pacienteEditDto.getNumero_personal()).ifPresent(paciente::setNumero_personal);
+        Optional.ofNullable(pacienteEditDto.getPuesto()).ifPresent(paciente::setPuesto);
+        Optional.ofNullable(pacienteEditDto.getArea_adscripcion()).ifPresent(paciente::setArea_adscripcion);
+        Optional.ofNullable(pacienteEditDto.getTipo_contratacion()).ifPresent(paciente::setTipo_contratacion);
+        //paciente.setHabla_lengua_indigena(pacienteEditDto.isHabla_lengua_indigena());
+        
+        Optional.ofNullable(pacienteEditDto.getLengua_indigena()).ifPresent(paciente::setLengua_indigena);
 
         pacienteRepository.save(paciente);
         return null;
@@ -160,6 +202,26 @@ public class PacienteService {
                 .origen(paciente.getOrigen())
                 .estado_civil(paciente.getEstado_civil())
                 .facultad(paciente.getFacultad())
+                .tipo_paciente(paciente.getTipo_paciente())
+                .curp(paciente.getCurp())
+                .email(paciente.getEmail())
+                .calle(paciente.getCalle())
+                .numero_exterior(paciente.getNumero_exterior())
+                .numero_interior(paciente.getNumero_interior())
+                .colonia(paciente.getColonia())
+                .cp(paciente.getCp())
+                .municipio(paciente.getMunicipio())
+                .entidad_federativa(paciente.getEntidad_federativa())
+                .nombre_responsable(paciente.getNombre_responsable())
+                .parentesco_responsable(paciente.getParentesco_responsable())
+                .telefono_responsable(paciente.getTelefono_responsable())
+                .direccion_responsable(paciente.getDireccion_responsable())
+                .numero_personal(paciente.getNumero_personal())
+                .puesto(paciente.getPuesto())
+                .area_adscripcion(paciente.getArea_adscripcion())
+                .tipo_contratacion(paciente.getTipo_contratacion())
+                //.habla_lengua_indigena(paciente.isHabla_lengua_indigena())
+                .lengua_indigena(paciente.getLengua_indigena())
                 .registros(registros)
                 .build();
         return idPacienteDto;

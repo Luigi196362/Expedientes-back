@@ -21,7 +21,7 @@ public class AllPacientesDto {
     @Data
     public static class PacienteInfo {
         private int id;
-        private String matricula;
+        //private String matricula;
         private String nombre;
         private int sexo;
         private String telefono;
