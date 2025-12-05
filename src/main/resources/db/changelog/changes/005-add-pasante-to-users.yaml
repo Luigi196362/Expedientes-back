@@ -1,0 +1,14 @@
+databaseChangeLog:
+  - changeSet:
+      id: 005-add-pasante-to-users
+      author: luis
+      changes:
+        - addColumn:
+            tableName: usuarios
+            columns:
+              - column:
+                  name: pasante
+                  type: boolean
+                  defaultValueBoolean: false
+                  constraints:
+                    nullable: false

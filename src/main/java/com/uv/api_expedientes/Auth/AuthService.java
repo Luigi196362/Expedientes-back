@@ -73,6 +73,7 @@ public class AuthService {
                                 .telefono(registerUserDto.getTelefono())
                                 .facultad(registerUserDto.getFacultad())
                                 .activo(true)
+                                .pasante(registerUserDto.isPasante())
                                 .fecha_creacion(new Date())
                                 .rol(rol)
                                 .build();

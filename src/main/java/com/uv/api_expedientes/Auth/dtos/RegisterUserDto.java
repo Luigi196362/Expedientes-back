@@ -19,4 +19,5 @@ public class RegisterUserDto {
     private String telefono;
     private String facultad;
     private Integer rolId;
+    private boolean pasante;
 }

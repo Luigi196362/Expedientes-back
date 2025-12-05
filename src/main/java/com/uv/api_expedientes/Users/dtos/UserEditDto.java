@@ -21,6 +21,7 @@ public class UserEditDto {
     private String telefono;
     private String facultad;
     private Date fecha_creacion;
+    private boolean pasante;
     private Integer rolId;
 
 }

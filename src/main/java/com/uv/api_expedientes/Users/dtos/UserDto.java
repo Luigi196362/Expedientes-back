@@ -22,6 +22,7 @@ public class UserDto {
     private String telefono;
     private String facultad;
     private boolean activo;
+    private boolean pasante;
     private Date fecha_creacion;
     private int rolId;
 

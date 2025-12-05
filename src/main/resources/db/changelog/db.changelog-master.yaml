@@ -7,3 +7,5 @@ databaseChangeLog:
       file: db/changelog/changes/003-patients.yaml
   - include:
       file: db/changelog/changes/004-medical-records.yaml
+  - include:
+      file: db/changelog/changes/005-add-pasante-to-users.yaml

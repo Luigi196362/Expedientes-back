@@ -13,12 +13,15 @@ import com.uv.api_expedientes.Users.dtos.UserEditDto;
 
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
+
 @Service
 @RequiredArgsConstructor
 public class UserService {
 
     private final UserRepository userRepository;
     private final RolRepository rolRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public List<AllUsersDto> getUsers() {
         List<User> users = userRepository.findByActivoTrue();
@@ -35,7 +38,8 @@ public class UserService {
                         user.getTelefono(),
                         user.getFacultad(),
                         user.getEspecialidad(),
-                        user.getRol() != null ? user.getRol().getNombre() : "No hay rol asignado"))
+                        user.getRol() != null ? user.getRol().getNombre() : "No hay rol asignado",
+                        user.isPasante()))
                 .toList();
 
         return allUsersDto;
@@ -57,6 +61,7 @@ public class UserService {
                 .telefono(user.getTelefono())
                 .facultad(user.getFacultad())
                 .activo(user.isActivo())
+                .pasante(user.isPasante())
                 .fecha_creacion(user.getFecha_creacion())
                 .rolId(user.getRol() != null ? user.getRol().getId() : null)
                 .build();
@@ -90,10 +95,12 @@ public class UserService {
         Optional.ofNullable(userEditDto.getRfc()).ifPresent(user::setRfc);
         Optional.ofNullable(userEditDto.getCedulaProfesional()).ifPresent(user::setCedulaProfesional);
         Optional.ofNullable(userEditDto.getEspecialidad()).ifPresent(user::setEspecialidad);
-        Optional.ofNullable(userEditDto.getPassword()).ifPresent(user::setPassword);
+        Optional.ofNullable(userEditDto.getPassword())
+                .ifPresent(password -> user.setPassword(passwordEncoder.encode(password)));
         Optional.ofNullable(userEditDto.getTelefono()).ifPresent(user::setTelefono);
         Optional.ofNullable(userEditDto.getFacultad()).ifPresent(user::setFacultad);
         Optional.ofNullable(userEditDto.getFecha_creacion()).ifPresent(user::setFecha_creacion);
+        user.setPasante(userEditDto.isPasante());
         Optional.ofNullable(userEditDto.getRolId()).ifPresent(rolId -> user.setRol(newrol));
         userRepository.save(user);
         return "Usuario actualizado correctamente";

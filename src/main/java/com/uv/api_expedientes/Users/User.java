@@ -48,6 +48,7 @@ public class User implements UserDetails {
     private String telefono;
     private String facultad;
     private boolean activo;
+    private boolean pasante;
     private Date fecha_creacion;
 
     @ManyToOne

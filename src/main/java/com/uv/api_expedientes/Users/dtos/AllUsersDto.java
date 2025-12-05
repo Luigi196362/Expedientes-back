@@ -17,4 +17,5 @@ public class AllUsersDto {
     private String facultad;
     private String especialidad;
     private String rolNombre;
+    private boolean pasante;
 }
