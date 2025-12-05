@@ -1,0 +1,152 @@
+databaseChangeLog:
+  - changeSet:
+      id: 4
+      author: luis
+      changes:
+        - createTable:
+            tableName: notas_evolucion
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: usuario_id
+                  type: int
+                  constraints:
+                    foreignKeyName: fk_notas_usuarios
+                    references: usuarios(id)
+              - column:
+                  name: paciente_id
+                  type: int
+                  constraints:
+                    foreignKeyName: fk_notas_pacientes
+                    references: pacientes(id)
+              - column:
+                  name: interrogatorio
+                  type: text
+              - column:
+                  name: peso
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: talla
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: imc
+                  type: float
+                  constraints:
+                    nullable: false
+              - column:
+                  name: ta
+                  type: varchar(255)
+              - column:
+                  name: fc
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: fr
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: temperatura
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: saturacion
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: glicemia
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: hemoglobina
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: hemotipo
+                  type: varchar(255)
+              - column:
+                  name: padecimiento
+                  type: text
+              - column:
+                  name: exploracion
+                  type: text
+              - column:
+                  name: analisis
+                  type: text
+              - column:
+                  name: plan
+                  type: text
+              - column:
+                  name: diagnostico
+                  type: text
+              - column:
+                  name: tratamiento
+                  type: text
+              - column:
+                  name: fecha_creacion
+                  type: timestamp
+
+        - createTable:
+            tableName: historia_clinica
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: usuario_id
+                  type: int
+                  constraints:
+                    foreignKeyName: fk_historia_usuarios
+                    references: usuarios(id)
+              - column:
+                  name: paciente_id
+                  type: int
+                  constraints:
+                    foreignKeyName: fk_historia_pacientes
+                    references: pacientes(id)
+              - column:
+                  name: antecedentes_heredo_familiares
+                  type: text
+              - column:
+                  name: antecedentes_personales_no_patologicos
+                  type: text
+              - column:
+                  name: antecedentes_personales_patologicos
+                  type: text
+              - column:
+                  name: medicamentos_actuales
+                  type: text
+              - column:
+                  name: diagnostico_inicial
+                  type: text
+              - column:
+                  name: tratamiento
+                  type: text
+              - column:
+                  name: observaciones
+                  type: text
+              - column:
+                  name: alergias
+                  type: text
+              - column:
+                  name: fecha_creacion
+                  type: timestamp

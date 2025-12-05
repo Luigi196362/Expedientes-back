@@ -92,7 +92,7 @@ public class PacienteService {
                 .direccion_responsable(paciente.getDireccion_responsable())
                 .numero_personal(paciente.getNumero_personal())
                 .puesto(paciente.getPuesto())
-                .area_adscripcion(paciente.getArea_adscripcion())
+                .facultad_adscripcion(paciente.getFacultad_adscripcion())
                 .tipo_contratacion(paciente.getTipo_contratacion())
                 //.habla_lengua_indigena(paciente.isHabla_lengua_indigena())
                 .lengua_indigena(paciente.getLengua_indigena())
@@ -144,7 +144,7 @@ public class PacienteService {
         Optional.ofNullable(pacienteEditDto.getDireccion_responsable()).ifPresent(paciente::setDireccion_responsable);
         Optional.ofNullable(pacienteEditDto.getNumero_personal()).ifPresent(paciente::setNumero_personal);
         Optional.ofNullable(pacienteEditDto.getPuesto()).ifPresent(paciente::setPuesto);
-        Optional.ofNullable(pacienteEditDto.getArea_adscripcion()).ifPresent(paciente::setArea_adscripcion);
+        Optional.ofNullable(pacienteEditDto.getFacultad_adscripcion()).ifPresent(paciente::setFacultad_adscripcion);
         Optional.ofNullable(pacienteEditDto.getTipo_contratacion()).ifPresent(paciente::setTipo_contratacion);
         //paciente.setHabla_lengua_indigena(pacienteEditDto.isHabla_lengua_indigena());
         
@@ -218,7 +218,7 @@ public class PacienteService {
                 .direccion_responsable(paciente.getDireccion_responsable())
                 .numero_personal(paciente.getNumero_personal())
                 .puesto(paciente.getPuesto())
-                .area_adscripcion(paciente.getArea_adscripcion())
+                .facultad_adscripcion(paciente.getFacultad_adscripcion())
                 .tipo_contratacion(paciente.getTipo_contratacion())
                 //.habla_lengua_indigena(paciente.isHabla_lengua_indigena())
                 .lengua_indigena(paciente.getLengua_indigena())

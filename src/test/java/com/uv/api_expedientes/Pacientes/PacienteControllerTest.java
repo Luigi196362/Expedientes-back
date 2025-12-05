@@ -46,7 +46,6 @@ public class PacienteControllerTest {
     void testObtenerPacientes_Returns200() throws Exception {
         AllPacientesDto.PacienteInfo info = new AllPacientesDto.PacienteInfo();
         info.setId(1);
-        info.setMatricula("X123");
         info.setNombre("Juan");
         info.setSexo(1);
         info.setTelefono("2345678901");

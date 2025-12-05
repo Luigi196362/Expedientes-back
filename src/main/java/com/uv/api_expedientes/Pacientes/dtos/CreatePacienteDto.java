@@ -52,7 +52,7 @@ public class CreatePacienteDto {
     // Trabajador
     private String numero_personal;
     private String puesto;
-    private String area_adscripcion;
+    private String facultad_adscripcion;
     private String tipo_contratacion;
 
     // Sociodemográfico
