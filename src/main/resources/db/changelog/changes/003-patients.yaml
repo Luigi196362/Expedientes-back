@@ -44,9 +44,6 @@ databaseChangeLog:
                   name: programa_educativo
                   type: varchar(255)
               - column:
-                  name: ocupacion
-                  type: varchar(255)
-              - column:
                   name: residencia
                   type: varchar(255)
               - column:
@@ -107,7 +104,25 @@ databaseChangeLog:
                   name: telefono_responsable
                   type: varchar(255)
               - column:
-                  name: direccion_responsable
+                  name: calle_responsable
+                  type: varchar(255)
+              - column:
+                  name: numero_exterior_responsable
+                  type: varchar(255)
+              - column:
+                  name: numero_interior_responsable
+                  type: varchar(255)
+              - column:
+                  name: colonia_responsable
+                  type: varchar(255)
+              - column:
+                  name: cp_responsable
+                  type: varchar(255)
+              - column:
+                  name: municipio_responsable
+                  type: varchar(255)
+              - column:
+                  name: entidad_federativa_responsable
                   type: varchar(255)
               - column:
                   name: numero_personal

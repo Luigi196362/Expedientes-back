@@ -51,6 +51,9 @@ databaseChangeLog:
                   name: fecha_creacion
                   type: timestamp
               - column:
+                  name: pasante
+                  type: boolean
+              - column:
                   name: rol_id
                   type: int
                   constraints:

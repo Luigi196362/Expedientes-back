@@ -20,7 +20,6 @@ public class CreatePacienteDto {
     private int semestre;
     private String telefono;
     private String programa_educativo;
-    private String ocupacion;
     private String residencia;
     private String religion;
     private String escolaridad;
@@ -47,7 +46,13 @@ public class CreatePacienteDto {
     private String nombre_responsable;
     private String parentesco_responsable;
     private String telefono_responsable;
-    private String direccion_responsable;
+    private String calle_responsable;
+    private String numero_exterior_responsable;
+    private String numero_interior_responsable;
+    private String colonia_responsable;
+    private String cp_responsable;
+    private String municipio_responsable;
+    private String entidad_federativa_responsable;
 
     // Trabajador
     private String numero_personal;

@@ -68,7 +68,6 @@ public class PacienteService {
                 .semestre(paciente.getSemestre())
                 .telefono(paciente.getTelefono())
                 .programa_educativo(paciente.getPrograma_educativo())
-                .ocupacion(paciente.getOcupacion())
                 .residencia(paciente.getResidencia())
                 .religion(paciente.getReligion())
                 .escolaridad(paciente.getEscolaridad())
@@ -89,7 +88,13 @@ public class PacienteService {
                 .nombre_responsable(paciente.getNombre_responsable())
                 .parentesco_responsable(paciente.getParentesco_responsable())
                 .telefono_responsable(paciente.getTelefono_responsable())
-                .direccion_responsable(paciente.getDireccion_responsable())
+                .calle_responsable(paciente.getCalle_responsable())
+                .numero_exterior_responsable(paciente.getNumero_exterior_responsable())
+                .numero_interior_responsable(paciente.getNumero_interior_responsable())
+                .colonia_responsable(paciente.getColonia_responsable())
+                .cp_responsable(paciente.getCp_responsable())
+                .municipio_responsable(paciente.getMunicipio_responsable())
+                .entidad_federativa_responsable(paciente.getEntidad_federativa_responsable())
                 .numero_personal(paciente.getNumero_personal())
                 .puesto(paciente.getPuesto())
                 .facultad_adscripcion(paciente.getFacultad_adscripcion())
@@ -119,7 +124,6 @@ public class PacienteService {
         Optional.ofNullable(pacienteEditDto.getSemestre()).ifPresent(paciente::setSemestre);
         Optional.ofNullable(pacienteEditDto.getTelefono()).ifPresent(paciente::setTelefono);
         Optional.ofNullable(pacienteEditDto.getPrograma_educativo()).ifPresent(paciente::setPrograma_educativo);
-        Optional.ofNullable(pacienteEditDto.getOcupacion()).ifPresent(paciente::setOcupacion);
         Optional.ofNullable(pacienteEditDto.getResidencia()).ifPresent(paciente::setResidencia);
         Optional.ofNullable(pacienteEditDto.getReligion()).ifPresent(paciente::setReligion);
         Optional.ofNullable(pacienteEditDto.getEscolaridad()).ifPresent(paciente::setEscolaridad);
@@ -141,7 +145,13 @@ public class PacienteService {
         Optional.ofNullable(pacienteEditDto.getNombre_responsable()).ifPresent(paciente::setNombre_responsable);
         Optional.ofNullable(pacienteEditDto.getParentesco_responsable()).ifPresent(paciente::setParentesco_responsable);
         Optional.ofNullable(pacienteEditDto.getTelefono_responsable()).ifPresent(paciente::setTelefono_responsable);
-        Optional.ofNullable(pacienteEditDto.getDireccion_responsable()).ifPresent(paciente::setDireccion_responsable);
+        Optional.ofNullable(pacienteEditDto.getCalle_responsable()).ifPresent(paciente::setCalle_responsable);
+        Optional.ofNullable(pacienteEditDto.getNumero_exterior_responsable()).ifPresent(paciente::setNumero_exterior_responsable);
+        Optional.ofNullable(pacienteEditDto.getNumero_interior_responsable()).ifPresent(paciente::setNumero_interior_responsable);
+        Optional.ofNullable(pacienteEditDto.getColonia_responsable()).ifPresent(paciente::setColonia_responsable);
+        Optional.ofNullable(pacienteEditDto.getCp_responsable()).ifPresent(paciente::setCp_responsable);
+        Optional.ofNullable(pacienteEditDto.getMunicipio_responsable()).ifPresent(paciente::setMunicipio_responsable);
+        Optional.ofNullable(pacienteEditDto.getEntidad_federativa_responsable()).ifPresent(paciente::setEntidad_federativa_responsable);
         Optional.ofNullable(pacienteEditDto.getNumero_personal()).ifPresent(paciente::setNumero_personal);
         Optional.ofNullable(pacienteEditDto.getPuesto()).ifPresent(paciente::setPuesto);
         Optional.ofNullable(pacienteEditDto.getFacultad_adscripcion()).ifPresent(paciente::setFacultad_adscripcion);
@@ -194,7 +204,6 @@ public class PacienteService {
                 .semestre(paciente.getSemestre())
                 .telefono(paciente.getTelefono())
                 .programa_educativo(paciente.getPrograma_educativo())
-                .ocupacion(paciente.getOcupacion())
                 .residencia(paciente.getResidencia())
                 .religion(paciente.getReligion())
                 .escolaridad(paciente.getEscolaridad())
@@ -215,7 +224,13 @@ public class PacienteService {
                 .nombre_responsable(paciente.getNombre_responsable())
                 .parentesco_responsable(paciente.getParentesco_responsable())
                 .telefono_responsable(paciente.getTelefono_responsable())
-                .direccion_responsable(paciente.getDireccion_responsable())
+                .calle_responsable(paciente.getCalle_responsable())
+                .numero_exterior_responsable(paciente.getNumero_exterior_responsable())
+                .numero_interior_responsable(paciente.getNumero_interior_responsable())
+                .colonia_responsable(paciente.getColonia_responsable())
+                .cp_responsable(paciente.getCp_responsable())
+                .municipio_responsable(paciente.getMunicipio_responsable())
+                .entidad_federativa_responsable(paciente.getEntidad_federativa_responsable())
                 .numero_personal(paciente.getNumero_personal())
                 .puesto(paciente.getPuesto())
                 .facultad_adscripcion(paciente.getFacultad_adscripcion())
