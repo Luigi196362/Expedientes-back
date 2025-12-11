@@ -4,6 +4,8 @@ import java.util.Date;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -28,7 +30,10 @@ public class Paciente {
 
     private String matricula;
     private String nombre;
-    private int sexo;
+
+    @Enumerated(EnumType.STRING)
+    private Sexo sexo;
+
     private Date fecha_nacimiento;
     private int grupo;
     private int semestre;
@@ -41,11 +46,11 @@ public class Paciente {
     private String origen;
     private String estado_civil;
     private String facultad;
-    
+
     // Identificación
     private String tipo_paciente;
     private String curp;
-    
+
     // Contacto y Ubicación
     private String email;
     private String calle;
@@ -55,7 +60,7 @@ public class Paciente {
     private String cp;
     private String municipio;
     private String entidad_federativa;
-    
+
     // Responsable
     private String nombre_responsable;
     private String parentesco_responsable;
@@ -67,17 +72,21 @@ public class Paciente {
     private String cp_responsable;
     private String municipio_responsable;
     private String entidad_federativa_responsable;
-    
+
     // Trabajador
     private String numero_personal;
     private String puesto;
-    private String facultad_adscripcion;
     private String tipo_contratacion;
-    
+
     // Sociodemográfico
-    //private boolean habla_lengua_indigena;
+    // private boolean habla_lengua_indigena;
     private String lengua_indigena;
     private Date fecha_creacion;
     private boolean activo;
 
+    public enum Sexo {
+        MASCULINO,
+        FEMENINO,
+        OTRO;
+    }
 }

@@ -3,6 +3,8 @@ package com.uv.api_expedientes.Pacientes.dtos;
 import java.util.Date;
 import java.util.List;
 
+import com.uv.api_expedientes.Pacientes.Paciente.Sexo;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,7 +18,7 @@ public class IdPacienteDto {
     private Integer id;
     private String matricula;
     private String nombre;
-    private int sexo;
+    private Sexo sexo;
     private Date fecha_nacimiento;
     private int grupo;
     private int semestre;
@@ -63,7 +65,7 @@ public class IdPacienteDto {
     private String tipo_contratacion;
 
     // Sociodemográfico
-    //private boolean habla_lengua_indigena;
+    // private boolean habla_lengua_indigena;
     private String lengua_indigena;
 
     private List<Registros> registros;

@@ -2,7 +2,9 @@ package com.uv.api_expedientes.Pacientes;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
@@ -14,6 +16,7 @@ import com.uv.api_expedientes.Notas.NotaEvolucion.NotaEvolucionRepository;
 import com.uv.api_expedientes.Pacientes.dtos.AllPacientesDto;
 import com.uv.api_expedientes.Pacientes.dtos.IdPacienteDto;
 import com.uv.api_expedientes.Pacientes.dtos.PacienteEditDto;
+import com.uv.api_expedientes.Pacientes.dtos.SatisticsPacienteDto;
 
 import lombok.RequiredArgsConstructor;
 
@@ -31,15 +34,17 @@ public class PacienteService {
 
         List<Paciente> pacientes = pacienteRepository.findByActivoTrue();
 
-        int cantidad_mujeres = (int) pacientes.stream().filter(p -> p.getSexo() == 2).count();
-        int cantidad_hombres = (int) pacientes.stream().filter(p -> p.getSexo() == 1).count();
-        int cantidad_registros = pacientes.size();
+        // int cantidad_mujeres = (int) pacientes.stream().filter(p -> p.getSexo() ==
+        // 2).count();
+        // int cantidad_hombres = (int) pacientes.stream().filter(p -> p.getSexo() ==
+        // 1).count();
+        // int cantidad_registros = pacientes.size();
 
         List<AllPacientesDto.PacienteInfo> pacientesInfo = new ArrayList<>();
         for (Paciente p : pacientes) {
             AllPacientesDto.PacienteInfo info = new AllPacientesDto.PacienteInfo();
             info.setId(p.getId());
-            //info.setMatricula(p.getMatricula());
+            // info.setMatricula(p.getMatricula());
             info.setNombre(p.getNombre());
             info.setSexo(p.getSexo());
             info.setTelefono(p.getTelefono());
@@ -49,9 +54,9 @@ public class PacienteService {
         }
 
         AllPacientesDto dto = AllPacientesDto.builder()
-                .cantidad_registros(cantidad_registros)
-                .cantidad_mujeres(cantidad_mujeres)
-                .cantidad_hombres(cantidad_hombres)
+                // .cantidad_registros(cantidad_registros)
+                // .cantidad_mujeres(cantidad_mujeres)
+                // .cantidad_hombres(cantidad_hombres)
                 .pacientes(pacientesInfo)
                 .build();
 
@@ -97,9 +102,8 @@ public class PacienteService {
                 .entidad_federativa_responsable(paciente.getEntidad_federativa_responsable())
                 .numero_personal(paciente.getNumero_personal())
                 .puesto(paciente.getPuesto())
-                .facultad_adscripcion(paciente.getFacultad_adscripcion())
                 .tipo_contratacion(paciente.getTipo_contratacion())
-                //.habla_lengua_indigena(paciente.isHabla_lengua_indigena())
+                // .habla_lengua_indigena(paciente.isHabla_lengua_indigena())
                 .lengua_indigena(paciente.getLengua_indigena())
                 .fecha_creacion(new Date())
                 .activo(true)
@@ -131,7 +135,7 @@ public class PacienteService {
         Optional.ofNullable(pacienteEditDto.getOrigen()).ifPresent(paciente::setOrigen);
         Optional.ofNullable(pacienteEditDto.getEstado_civil()).ifPresent(paciente::setEstado_civil);
         Optional.ofNullable(pacienteEditDto.getFacultad()).ifPresent(paciente::setFacultad);
-        
+
         Optional.ofNullable(pacienteEditDto.getTipo_paciente()).ifPresent(paciente::setTipo_paciente);
         Optional.ofNullable(pacienteEditDto.getCurp()).ifPresent(paciente::setCurp);
         Optional.ofNullable(pacienteEditDto.getEmail()).ifPresent(paciente::setEmail);
@@ -146,18 +150,20 @@ public class PacienteService {
         Optional.ofNullable(pacienteEditDto.getParentesco_responsable()).ifPresent(paciente::setParentesco_responsable);
         Optional.ofNullable(pacienteEditDto.getTelefono_responsable()).ifPresent(paciente::setTelefono_responsable);
         Optional.ofNullable(pacienteEditDto.getCalle_responsable()).ifPresent(paciente::setCalle_responsable);
-        Optional.ofNullable(pacienteEditDto.getNumero_exterior_responsable()).ifPresent(paciente::setNumero_exterior_responsable);
-        Optional.ofNullable(pacienteEditDto.getNumero_interior_responsable()).ifPresent(paciente::setNumero_interior_responsable);
+        Optional.ofNullable(pacienteEditDto.getNumero_exterior_responsable())
+                .ifPresent(paciente::setNumero_exterior_responsable);
+        Optional.ofNullable(pacienteEditDto.getNumero_interior_responsable())
+                .ifPresent(paciente::setNumero_interior_responsable);
         Optional.ofNullable(pacienteEditDto.getColonia_responsable()).ifPresent(paciente::setColonia_responsable);
         Optional.ofNullable(pacienteEditDto.getCp_responsable()).ifPresent(paciente::setCp_responsable);
         Optional.ofNullable(pacienteEditDto.getMunicipio_responsable()).ifPresent(paciente::setMunicipio_responsable);
-        Optional.ofNullable(pacienteEditDto.getEntidad_federativa_responsable()).ifPresent(paciente::setEntidad_federativa_responsable);
+        Optional.ofNullable(pacienteEditDto.getEntidad_federativa_responsable())
+                .ifPresent(paciente::setEntidad_federativa_responsable);
         Optional.ofNullable(pacienteEditDto.getNumero_personal()).ifPresent(paciente::setNumero_personal);
         Optional.ofNullable(pacienteEditDto.getPuesto()).ifPresent(paciente::setPuesto);
-        Optional.ofNullable(pacienteEditDto.getFacultad_adscripcion()).ifPresent(paciente::setFacultad_adscripcion);
         Optional.ofNullable(pacienteEditDto.getTipo_contratacion()).ifPresent(paciente::setTipo_contratacion);
-        //paciente.setHabla_lengua_indigena(pacienteEditDto.isHabla_lengua_indigena());
-        
+        // paciente.setHabla_lengua_indigena(pacienteEditDto.isHabla_lengua_indigena());
+
         Optional.ofNullable(pacienteEditDto.getLengua_indigena()).ifPresent(paciente::setLengua_indigena);
 
         pacienteRepository.save(paciente);
@@ -233,9 +239,8 @@ public class PacienteService {
                 .entidad_federativa_responsable(paciente.getEntidad_federativa_responsable())
                 .numero_personal(paciente.getNumero_personal())
                 .puesto(paciente.getPuesto())
-                .facultad_adscripcion(paciente.getFacultad_adscripcion())
                 .tipo_contratacion(paciente.getTipo_contratacion())
-                //.habla_lengua_indigena(paciente.isHabla_lengua_indigena())
+                // .habla_lengua_indigena(paciente.isHabla_lengua_indigena())
                 .lengua_indigena(paciente.getLengua_indigena())
                 .registros(registros)
                 .build();
@@ -257,4 +262,110 @@ public class PacienteService {
         }
     }
 
+    public SatisticsPacienteDto obtenerEstadisticas() {
+        List<Paciente> pacientes = pacienteRepository.findByActivoTrue();
+        Iterable<NotaEvolucion> notas = notaEvolucionRepository.findAll();
+        Iterable<HistoriaClinica> historiasClinicas = historiaClinicaRepository.findAll();
+
+        long totalPacientes = pacienteRepository.countByActivoTrue();
+        long totalNotas = notaEvolucionRepository.count();
+        Map<String, Integer> porSexo = new HashMap<>();
+        Map<String, Integer> porFacultad = new HashMap<>();
+        Map<String, Integer> porProgramaEducativo = new HashMap<>();
+        Map<Integer, Integer> porSemestre = new HashMap<>();
+        Map<String, Integer> porTipoPaciente = new HashMap<>();
+        Map<String, Integer> porEstadoCivil = new HashMap<>();
+        Map<String, Integer> porLenguaIndigena = new HashMap<>();
+        Map<String, Integer> casosPorDiaMes = new HashMap<>();
+        Map<String, Integer> casosPorAnio = new HashMap<>();
+        Map<String, Integer> topSintomas = new HashMap<>();
+
+        // Estadisticas por sexo
+        for (Paciente paciente : pacientes) {
+            porSexo.put(paciente.getSexo().name(), porSexo.getOrDefault(paciente.getSexo().name(), 0) + 1);
+        }
+
+        // Estadisticas por facultad
+
+        for (Paciente paciente : pacientes) {
+            String facultad = paciente.getFacultad() != null ? paciente.getFacultad() : "Sin Facultad";
+            porFacultad.put(facultad, porFacultad.getOrDefault(facultad, 0) + 1);
+        }
+
+        // Estadisticas por programa educativo
+
+        for (Paciente paciente : pacientes) {
+            String programa = paciente.getPrograma_educativo() != null ? paciente.getPrograma_educativo()
+                    : "Sin Programa";
+            porProgramaEducativo.put(programa,
+                    porProgramaEducativo.getOrDefault(programa, 0) + 1);
+        }
+
+        // Estadisticas por semestre
+        for (Paciente paciente : pacientes) {
+            porSemestre.put(paciente.getSemestre(), porSemestre.getOrDefault(paciente.getSemestre(), 0) + 1);
+        }
+
+        // Estadisticas por tipo de paciente
+        for (Paciente paciente : pacientes) {
+            String tipo = paciente.getTipo_paciente() != null ? paciente.getTipo_paciente() : "Sin Tipo";
+            porTipoPaciente.put(tipo,
+                    porTipoPaciente.getOrDefault(tipo, 0) + 1);
+        }
+
+        // Estadisticas por estado civil
+        for (Paciente paciente : pacientes) {
+            String estado = paciente.getEstado_civil() != null ? paciente.getEstado_civil() : "Sin Estado Civil";
+            porEstadoCivil.put(estado,
+                    porEstadoCivil.getOrDefault(estado, 0) + 1);
+        }
+
+        // Estadisticas por lengua indigena
+        for (Paciente paciente : pacientes) {
+            String lengua = paciente.getLengua_indigena() != null ? paciente.getLengua_indigena() : "Ninguna";
+            porLenguaIndigena.put(lengua,
+                    porLenguaIndigena.getOrDefault(lengua, 0) + 1);
+        }
+
+        // Estadisticas por casos por dia y mes
+        for (Paciente paciente : pacientes) {
+            String fecha = paciente.getFecha_creacion().toString();
+            String dia = fecha.substring(8, 10);
+            String mes = fecha.substring(5, 7);
+            casosPorDiaMes.put(dia + "-" + mes, casosPorDiaMes.getOrDefault(dia + "-" + mes, 0) + 1);
+        }
+
+        // Estadisticas por casos por anio
+        for (Paciente paciente : pacientes) {
+            String fecha = paciente.getFecha_creacion().toString();
+            String anio = fecha.substring(0, 4);
+            casosPorAnio.put(anio, casosPorAnio.getOrDefault(anio, 0) + 1);
+        }
+
+        // Estadisticas por top sintomas
+        for (NotaEvolucion nota : notas) {
+            String sintomas = nota.getDiagnostico() != null ? nota.getDiagnostico() : "Sin Diagnóstico";
+            topSintomas.put(sintomas, topSintomas.getOrDefault(sintomas, 0) + 1);
+        }
+
+        for (HistoriaClinica historia : historiasClinicas) {
+            String sintomas = historia.getDiagnostico() != null ? historia.getDiagnostico() : "Sin Diagnóstico";
+            topSintomas.put(sintomas, topSintomas.getOrDefault(sintomas, 0) + 1);
+        }
+
+        return SatisticsPacienteDto.builder()
+                .totalPacientes(totalPacientes)
+                .totalNotas(totalNotas)
+                .porSexo(porSexo)
+                .porFacultad(porFacultad)
+                .porProgramaEducativo(porProgramaEducativo)
+                .porSemestre(porSemestre)
+                .porTipoPaciente(porTipoPaciente)
+                .porEstadoCivil(porEstadoCivil)
+                .porLenguaIndigena(porLenguaIndigena)
+                .casosPorDiaMes(casosPorDiaMes)
+                .casosPorAnio(casosPorAnio)
+                .topSintomas(topSintomas)
+                .build();
+    }
 }

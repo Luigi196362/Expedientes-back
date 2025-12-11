@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.uv.api_expedientes.Pacientes.dtos.AllPacientesDto;
 import com.uv.api_expedientes.Pacientes.dtos.IdPacienteDto;
 import com.uv.api_expedientes.Pacientes.dtos.PacienteEditDto;
+import com.uv.api_expedientes.Pacientes.dtos.SatisticsPacienteDto;
 
 import lombok.RequiredArgsConstructor;
 
@@ -47,5 +48,10 @@ public class PacienteController {
     @DeleteMapping("/Eliminar/{id}")
     public ResponseEntity<String> desactivarPaciente(@PathVariable("id") int id) {
         return ResponseEntity.ok(pacienteService.desactivarPaciente(id));
+    }
+
+    @GetMapping("/Estadisticas")
+    public ResponseEntity<SatisticsPacienteDto> obtenerEstadisticas() {
+        return ResponseEntity.ok(pacienteService.obtenerEstadisticas());
     }
 }

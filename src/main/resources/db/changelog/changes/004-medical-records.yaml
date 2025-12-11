@@ -26,70 +26,49 @@ databaseChangeLog:
                     foreignKeyName: fk_notas_pacientes
                     references: pacientes(id)
               - column:
+                  name: motivo_consulta
+                  type: text
+              - column:
                   name: interrogatorio
+                  type: text
+              - column:
+                  name: padecimiento_actual
+                  type: text
+              - column:
+                  name: exploracion_fisica
                   type: text
               - column:
                   name: peso
                   type: int
-                  constraints:
-                    nullable: false
               - column:
                   name: talla
                   type: int
-                  constraints:
-                    nullable: false
               - column:
                   name: imc
                   type: float
-                  constraints:
-                    nullable: false
               - column:
-                  name: ta
+                  name: tension_arterial
                   type: varchar(255)
               - column:
-                  name: fc
+                  name: frecuencia_cardiaca
                   type: int
-                  constraints:
-                    nullable: false
               - column:
-                  name: fr
+                  name: frecuencia_respiratoria
                   type: int
-                  constraints:
-                    nullable: false
               - column:
                   name: temperatura
                   type: int
-                  constraints:
-                    nullable: false
               - column:
                   name: saturacion
                   type: int
-                  constraints:
-                    nullable: false
               - column:
                   name: glicemia
                   type: int
-                  constraints:
-                    nullable: false
               - column:
                   name: hemoglobina
                   type: int
-                  constraints:
-                    nullable: false
               - column:
                   name: hemotipo
-                  type: varchar(255)
-              - column:
-                  name: padecimiento
-                  type: text
-              - column:
-                  name: exploracion
-                  type: text
-              - column:
-                  name: analisis
-                  type: text
-              - column:
-                  name: plan
                   type: text
               - column:
                   name: diagnostico
@@ -98,9 +77,16 @@ databaseChangeLog:
                   name: tratamiento
                   type: text
               - column:
+                  name: plan_tratamiento
+                  type: text
+              - column:
+                  name: observaciones
+                  type: text
+              - column:
                   name: fecha_creacion
                   type: timestamp
 
+# Historia Clinica
         - createTable:
             tableName: historia_clinica
             columns:
@@ -124,28 +110,91 @@ databaseChangeLog:
                     foreignKeyName: fk_historia_pacientes
                     references: pacientes(id)
               - column:
+                  name: motivo_consulta
+                  type: text
+              - column:
+                  name: interrogatorio
+                  type: text
+              - column:
+                  name: padecimiento_actual
+                  type: text
+              - column:
+                  name: exploracion_fisica
+                  type: text
+              - column:
+                  name: peso
+                  type: int
+              - column:
+                  name: talla
+                  type: int
+              - column:
+                  name: imc
+                  type: float
+              - column:
+                  name: tension_arterial
+                  type: text
+              - column:
+                  name: frecuencia_cardiaca
+                  type: int
+              - column:
+                  name: frecuencia_respiratoria
+                  type: int
+              - column:
+                  name: temperatura
+                  type: int
+              - column:
+                  name: saturacion
+                  type: int
+              - column:
+                  name: glicemia
+                  type: int
+              - column:
+                  name: hemoglobina
+                  type: int
+              - column:
+                  name: hemotipo
+                  type: text
+              - column:
                   name: antecedentes_heredo_familiares
                   type: text
               - column:
-                  name: antecedentes_personales_no_patologicos
+                  name: antecedentes_no_patologicos
                   type: text
               - column:
-                  name: antecedentes_personales_patologicos
+                  name: antecedentes_patologicos
+                  type: text
+              - column:
+                  name: antecedentes_quirurgicos
                   type: text
               - column:
                   name: medicamentos_actuales
                   type: text
               - column:
-                  name: diagnostico_inicial
+                  name: alergias
+                  type: text
+              - column:
+                  name: antecedentes_gineco_obstetricos
+                  type: text
+              - column:
+                  name: cancer_prostata
+                  type: text
+              - column:
+                  name: vacunas
+                  type: text
+              - column:
+                  name: adicciones
+                  type: text
+              - column:
+                  name: diagnostico
                   type: text
               - column:
                   name: tratamiento
                   type: text
               - column:
-                  name: observaciones
+                  name: plan_tratamiento
                   type: text
               - column:
-                  name: alergias
+                  name: observaciones
                   type: text
               - column:
                   name: fecha_creacion

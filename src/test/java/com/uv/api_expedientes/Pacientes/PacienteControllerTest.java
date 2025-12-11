@@ -47,7 +47,7 @@ public class PacienteControllerTest {
         AllPacientesDto.PacienteInfo info = new AllPacientesDto.PacienteInfo();
         info.setId(1);
         info.setNombre("Juan");
-        info.setSexo(1);
+        info.setSexo(Paciente.Sexo.MASCULINO);
         info.setTelefono("2345678901");
         info.setFecha_creacion(new Date());
         info.setFecha_nacimiento(new Date());
@@ -66,7 +66,7 @@ public class PacienteControllerTest {
                 .andExpect(jsonPath("$.cantidad_mujeres").value(0))
                 .andExpect(jsonPath("$.cantidad_hombres").value(1))
                 .andExpect(jsonPath("$.pacientes[0].nombre").value("Juan"))
-                .andExpect(jsonPath("$.pacientes[0].sexo").value(1));
+                .andExpect(jsonPath("$.pacientes[0].sexo").value("MASCULINO"));
     }
 
     // Probar crear un nuevo paciente

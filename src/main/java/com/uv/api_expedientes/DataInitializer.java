@@ -42,7 +42,7 @@ public class DataInitializer implements CommandLineRunner {
                 new Accion("Editar", "Permite editar"),
                 new Accion("Eliminar", "Permite eliminar"),
                 new Accion("Ver", "Permite ver"),
-                new Accion("Exportar", "Permite exportar a pdf"));
+                new Accion("Estadisticas", "Permite generar estadisticas"));
 
         for (Accion accion : accionesBasicas) {
             if (accionRepository.findByNombre(accion.getNombre()).isEmpty()) {

@@ -43,7 +43,7 @@ public class PacientesServiceTest {
                 .id(1)
                 .matricula("123")
                 .nombre("Luis")
-                .sexo(1)
+                .sexo(Paciente.Sexo.MASCULINO)
                 .telefono("12345")
                 .fecha_nacimiento(new Date())
                 .fecha_creacion(new Date())
@@ -196,5 +196,35 @@ public class PacientesServiceTest {
         assertThrows(RuntimeException.class, () -> pacienteService.desactivarPaciente(1));
 
         System.out.println("[TEST OK] testDesactivarPaciente_NotFound_ThrowsException");
+    }
+
+    // Estadisticas con nulls
+    @Test
+    void testObtenerEstadisticas_HandlesNulls() {
+        Paciente pacienteNulls = new Paciente();
+        pacienteNulls.setSexo(Paciente.Sexo.MASCULINO);
+        pacienteNulls.setFecha_creacion(new Date());
+        // Otros campos a null por defecto
+
+        NotaEvolucion notaNull = new NotaEvolucion();
+        // Diagnostico null
+
+        HistoriaClinica historiaNull = new HistoriaClinica();
+        // Diagnostico null
+
+        when(pacienteRepository.findByActivoTrue()).thenReturn(List.of(pacienteNulls));
+        when(notaEvolucionRepository.findAll()).thenReturn(List.of(notaNull));
+        when(historiaClinicaRepository.findAll()).thenReturn(List.of(historiaNull));
+        when(pacienteRepository.countByActivoTrue()).thenReturn(1);
+        when(notaEvolucionRepository.count()).thenReturn(1L);
+
+        com.uv.api_expedientes.Pacientes.dtos.SatisticsPacienteDto stats = pacienteService.obtenerEstadisticas();
+
+        assertNotNull(stats);
+        assertEquals(1, stats.getPorFacultad().get("Sin Facultad"));
+        assertEquals(1, stats.getPorTipoPaciente().get("Sin Tipo"));
+        assertEquals(2, stats.getTopSintomas().get("Sin Diagnóstico"));
+
+        System.out.println("[TEST OK] testObtenerEstadisticas_HandlesNulls");
     }
 }
