@@ -36,11 +36,9 @@ public class PacienteService {
 
         List<Paciente> pacientes = pacienteRepository.findByActivoTrue();
 
-        // int cantidad_mujeres = (int) pacientes.stream().filter(p -> p.getSexo() ==
-        // 2).count();
-        // int cantidad_hombres = (int) pacientes.stream().filter(p -> p.getSexo() ==
-        // 1).count();
-        // int cantidad_registros = pacientes.size();
+        int cantidad_mujeres = (int) pacientes.stream().filter(p -> p.getSexo() == Paciente.Sexo.FEMENINO).count();
+        int cantidad_hombres = (int) pacientes.stream().filter(p -> p.getSexo() == Paciente.Sexo.MASCULINO).count();
+        int cantidad_registros = pacientes.size();
 
         List<AllPacientesDto.PacienteInfo> pacientesInfo = new ArrayList<>();
         for (Paciente p : pacientes) {
@@ -56,9 +54,9 @@ public class PacienteService {
         }
 
         AllPacientesDto dto = AllPacientesDto.builder()
-                // .cantidad_registros(cantidad_registros)
-                // .cantidad_mujeres(cantidad_mujeres)
-                // .cantidad_hombres(cantidad_hombres)
+                .cantidad_registros(cantidad_registros)
+                .cantidad_mujeres(cantidad_mujeres)
+                .cantidad_hombres(cantidad_hombres)
                 .pacientes(pacientesInfo)
                 .build();
 
