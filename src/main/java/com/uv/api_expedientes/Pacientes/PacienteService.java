@@ -1,5 +1,7 @@
 package com.uv.api_expedientes.Pacientes;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -268,7 +270,7 @@ public class PacienteService {
         Iterable<HistoriaClinica> historiasClinicas = historiaClinicaRepository.findAll();
 
         long totalPacientes = pacienteRepository.countByActivoTrue();
-        long totalNotas = notaEvolucionRepository.count();
+        long totalNotas = notaEvolucionRepository.count() + historiaClinicaRepository.count();
         Map<String, Integer> porSexo = new HashMap<>();
         Map<String, Integer> porFacultad = new HashMap<>();
         Map<String, Integer> porProgramaEducativo = new HashMap<>();
@@ -368,4 +370,115 @@ public class PacienteService {
                 .topSintomas(topSintomas)
                 .build();
     }
+
+    public SatisticsPacienteDto obtenerEstadisticasRango(Date startDate, Date endDate) {
+
+        List<Paciente> pacientes = pacienteRepository.findByActivoTrue()
+                .stream()
+                .filter(p -> p.getFecha_creacion() != null
+                        && !p.getFecha_creacion().before(startDate)
+                        && !p.getFecha_creacion().after(endDate))
+                .toList();
+
+        List<NotaEvolucion> notas = notaEvolucionRepository.findAll()
+                .stream()
+                .filter(n -> n.getFecha_creacion() != null
+                        && !n.getFecha_creacion().before(startDate)
+                        && !n.getFecha_creacion().after(endDate))
+                .toList();
+
+        List<HistoriaClinica> historiasClinicas = historiaClinicaRepository.findAll()
+                .stream()
+                .filter(h -> h.getFecha_creacion() != null
+                        && !h.getFecha_creacion().before(startDate)
+                        && !h.getFecha_creacion().after(endDate))
+                .toList();
+
+        long totalPacientes = pacientes.size();
+        long totalNotas = notas.size() + historiasClinicas.size();
+
+        Map<String, Integer> porSexo = new HashMap<>();
+        Map<String, Integer> porFacultad = new HashMap<>();
+        Map<String, Integer> porProgramaEducativo = new HashMap<>();
+        Map<Integer, Integer> porSemestre = new HashMap<>();
+        Map<String, Integer> porTipoPaciente = new HashMap<>();
+        Map<String, Integer> porEstadoCivil = new HashMap<>();
+        Map<String, Integer> porLenguaIndigena = new HashMap<>();
+        Map<String, Integer> casosPorDiaMes = new HashMap<>();
+        Map<String, Integer> casosPorAnio = new HashMap<>();
+        Map<String, Integer> topSintomas = new HashMap<>();
+
+        for (Paciente paciente : pacientes) {
+
+            porSexo.merge(paciente.getSexo().name(), 1, Integer::sum);
+
+            porFacultad.merge(
+                    paciente.getFacultad() != null ? paciente.getFacultad() : "Sin Facultad",
+                    1,
+                    Integer::sum);
+
+            porProgramaEducativo.merge(
+                    paciente.getPrograma_educativo() != null ? paciente.getPrograma_educativo() : "Sin Programa",
+                    1,
+                    Integer::sum);
+
+            porSemestre.merge(paciente.getSemestre(), 1, Integer::sum);
+
+            porTipoPaciente.merge(
+                    paciente.getTipo_paciente() != null ? paciente.getTipo_paciente() : "Sin Tipo",
+                    1,
+                    Integer::sum);
+
+            porEstadoCivil.merge(
+                    paciente.getEstado_civil() != null ? paciente.getEstado_civil() : "Sin Estado Civil",
+                    1,
+                    Integer::sum);
+
+            porLenguaIndigena.merge(
+                    paciente.getLengua_indigena() != null ? paciente.getLengua_indigena() : "Ninguna",
+                    1,
+                    Integer::sum);
+
+            LocalDate fecha = paciente.getFecha_creacion()
+                    .toInstant()
+                    .atZone(ZoneId.systemDefault())
+                    .toLocalDate();
+
+            casosPorDiaMes.merge(
+                    fecha.getDayOfMonth() + "-" + fecha.getMonthValue(),
+                    1,
+                    Integer::sum);
+
+            casosPorAnio.merge(
+                    String.valueOf(fecha.getYear()),
+                    1,
+                    Integer::sum);
+        }
+
+        for (NotaEvolucion nota : notas) {
+            String diagnostico = nota.getDiagnostico() != null ? nota.getDiagnostico() : "Sin Diagnóstico";
+            topSintomas.merge(diagnostico, 1, Integer::sum);
+        }
+
+        for (HistoriaClinica historia : historiasClinicas) {
+            String diagnostico = historia.getDiagnostico() != null ? historia.getDiagnostico() : "Sin Diagnóstico";
+            topSintomas.merge(diagnostico, 1, Integer::sum);
+        }
+
+        return SatisticsPacienteDto.builder()
+                .totalPacientes(totalPacientes)
+                .totalNotas(totalNotas)
+                .porSexo(porSexo)
+                .porFacultad(porFacultad)
+                .porProgramaEducativo(porProgramaEducativo)
+                .porSemestre(porSemestre)
+                .porTipoPaciente(porTipoPaciente)
+                .porEstadoCivil(porEstadoCivil)
+                .porLenguaIndigena(porLenguaIndigena)
+                .casosPorDiaMes(casosPorDiaMes)
+                .casosPorAnio(casosPorAnio)
+                .topSintomas(topSintomas)
+                .build();
+    }
+
 }

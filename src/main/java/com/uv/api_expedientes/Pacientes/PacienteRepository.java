@@ -10,4 +10,5 @@ public interface PacienteRepository extends CrudRepository<Paciente, Integer> {
     List<Paciente> findByActivoTrue();
 
     Integer countByActivoTrue();
+
 }
