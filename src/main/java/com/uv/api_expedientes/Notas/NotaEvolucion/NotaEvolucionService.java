@@ -25,6 +25,8 @@ public class NotaEvolucionService {
 
         private final PacienteRepository pacienteRepository;
 
+        private final com.uv.api_expedientes.Services.PdfService pdfService;
+
         private final JwtService jwtService;
 
         public String guardarNota(HttpServletRequest request, Integer idPaciente,
@@ -93,6 +95,16 @@ public class NotaEvolucionService {
                                 .observaciones(nota.getObservaciones())
                                 .fecha_creacion(nota.getFecha_creacion())
                                 .build();
+
         }
 
+        public byte[] generarPdf(Integer id) {
+                NotaEvolucion nota = notaEvolucionRepository.findById(id)
+                                .orElseThrow(() -> new RuntimeException("Nota no encontrada"));
+                try {
+                        return pdfService.generarNotaMedicaPdf(nota);
+                } catch (java.io.IOException e) {
+                        throw new RuntimeException("Error al generar PDF de nota médica", e);
+                }
+        }
 }

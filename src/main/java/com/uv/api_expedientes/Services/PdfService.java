@@ -49,4 +49,30 @@ public class PdfService {
             throw new IOException("Error creating PDF", e);
         }
     }
+
+    public byte[] generarNotaMedicaPdf(com.uv.api_expedientes.Notas.NotaEvolucion.NotaEvolucion nota)
+            throws IOException {
+        Context context = new Context();
+        context.setVariable("nota", nota);
+        context.setVariable("paciente", nota.getPaciente());
+        context.setVariable("medico", nota.getUsuario());
+
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+        context.setVariable("fechaHora",
+                sdf.format(nota.getFecha_creacion() != null ? nota.getFecha_creacion() : new Date()));
+
+        String html = templateEngine.process("nota-medica/nota-medica", context);
+
+        try (ByteArrayOutputStream os = new ByteArrayOutputStream()) {
+            PdfRendererBuilder builder = new PdfRendererBuilder();
+            builder.useFastMode();
+            // Important: Base URI must point to where the CSS/Images are for this template
+            builder.withHtmlContent(html, getClass().getResource("/templates/nota-medica/").toString());
+            builder.toStream(os);
+            builder.run();
+            return os.toByteArray();
+        } catch (Exception e) {
+            throw new IOException("Error creating PDF", e);
+        }
+    }
 }

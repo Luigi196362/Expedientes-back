@@ -36,4 +36,23 @@ public class NotaEvolucionController {
     public ResponseEntity<NotaEvolucionDto> obtenerNota(@PathVariable Integer id) {
         return ResponseEntity.ok(notaEvolucionService.obtenerPorId(id));
     }
+
+    @GetMapping("Ver/Nota/{id}/Pdf")
+    public ResponseEntity<byte[]> descargarNotaPdf(@PathVariable Integer id) {
+        byte[] pdfContent = notaEvolucionService.generarPdf(id);
+
+        org.springframework.http.HttpHeaders headers = new org.springframework.http.HttpHeaders();
+        headers.setContentType(org.springframework.http.MediaType.APPLICATION_PDF);
+        java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd_HH-mm");
+        String filename = "Nota_Medica_" + sdf.format(new java.util.Date()) + ".pdf";
+
+        headers.add(org.springframework.http.HttpHeaders.CONTENT_DISPOSITION,
+                "attachment; filename=\"" + filename + "\"");
+        headers.add("Access-Control-Expose-Headers", "Content-Disposition");
+        headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(pdfContent);
+    }
 }
