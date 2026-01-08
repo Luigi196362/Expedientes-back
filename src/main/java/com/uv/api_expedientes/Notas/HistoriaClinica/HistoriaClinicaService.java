@@ -27,6 +27,8 @@ public class HistoriaClinicaService {
 
         private final JwtService jwtService;
 
+        private final com.uv.api_expedientes.Services.PdfService pdfService;
+
         public String guardarHistoria(HttpServletRequest request, int idPaciente,
                         HistoriaClinicaDto historiaClinicaDto) {
 
@@ -122,4 +124,13 @@ public class HistoriaClinicaService {
                                 .build();
         }
 
+        public byte[] generarPdf(Integer id) {
+                HistoriaClinica historia = historiaClinicaRepository.findById(id)
+                                .orElseThrow(() -> new RuntimeException("Historia clínica no encontrada"));
+                try {
+                        return pdfService.generarHistoriaClinicaPdf(historia);
+                } catch (java.io.IOException e) {
+                        throw new RuntimeException("Error al generar PDF de historia clínica", e);
+                }
+        }
 }

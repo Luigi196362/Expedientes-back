@@ -75,4 +75,31 @@ public class PdfService {
             throw new IOException("Error creating PDF", e);
         }
     }
+
+    public byte[] generarHistoriaClinicaPdf(com.uv.api_expedientes.Notas.HistoriaClinica.HistoriaClinica historia)
+            throws IOException {
+        Context context = new Context();
+        context.setVariable("nota", historia);
+
+        context.setVariable("historia", historia);
+        context.setVariable("paciente", historia.getPaciente());
+        context.setVariable("medico", historia.getUsuario());
+
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+        context.setVariable("fechaHora",
+                sdf.format(historia.getFecha_creacion() != null ? historia.getFecha_creacion() : new Date()));
+
+        String html = templateEngine.process("historia-clinica/historia-clinica", context);
+
+        try (ByteArrayOutputStream os = new ByteArrayOutputStream()) {
+            PdfRendererBuilder builder = new PdfRendererBuilder();
+            builder.useFastMode();
+            builder.withHtmlContent(html, getClass().getResource("/templates/historia-clinica/").toString());
+            builder.toStream(os);
+            builder.run();
+            return os.toByteArray();
+        } catch (Exception e) {
+            throw new IOException("Error creating PDF", e);
+        }
+    }
 }

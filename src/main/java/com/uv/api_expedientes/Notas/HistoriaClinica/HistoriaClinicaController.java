@@ -35,4 +35,23 @@ public class HistoriaClinicaController {
     public ResponseEntity<HistoriaClinicaDto> obtenerHistoria(@PathVariable Integer id) {
         return ResponseEntity.ok(historiaClinicaService.obtenerPorId(id));
     }
+
+    @GetMapping("Ver/Historia/{id}/Pdf")
+    public ResponseEntity<byte[]> descargaHistoriaPdf(@PathVariable Integer id) {
+        byte[] pdfContent = historiaClinicaService.generarPdf(id);
+
+        org.springframework.http.HttpHeaders headers = new org.springframework.http.HttpHeaders();
+        headers.setContentType(org.springframework.http.MediaType.APPLICATION_PDF);
+        java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
+        String filename = "Historia_Clinica_" + sdf.format(new java.util.Date()) + ".pdf";
+
+        headers.add(org.springframework.http.HttpHeaders.CONTENT_DISPOSITION,
+                "attachment; filename=\"" + filename + "\"");
+        headers.add("Access-Control-Expose-Headers", "Content-Disposition");
+        headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(pdfContent);
+    }
 }
