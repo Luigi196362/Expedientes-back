@@ -28,7 +28,6 @@ public class NotaEvolucion {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(unique = true, nullable = false)
     private Integer id;
 
     // Identificacion
@@ -40,29 +39,43 @@ public class NotaEvolucion {
     @JoinColumn(name = "paciente_id")
     private Paciente paciente;
 
-    // Interrogatorio y exploracion
+    @Column(nullable = false)
+    private Date fecha_creacion;
+
+    // Interrogatorio y exploración
     private String motivo_consulta;
+
     private String interrogatorio;
+
     private String padecimiento_actual;
+
     private String exploracion_fisica;
 
     // Signos vitales
     private int peso;
     private int talla;
     private float imc;
+
+    @Column(length = 20)
     private String tension_arterial;
+
     private int frecuencia_cardiaca;
     private int frecuencia_respiratoria;
     private int temperatura;
     private int saturacion;
     private int glicemia;
     private int hemoglobina;
+
+    @Column(length = 10)
     private String hemotipo;
 
-    // Diagnostico y medicaciones
+    // Diagnóstico y tratamiento
     private String diagnostico;
+
     private String tratamiento;
+
     private String plan_tratamiento;
+
     private String observaciones;
-    private Date fecha_creacion;
+
 }

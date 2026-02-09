@@ -16,20 +16,19 @@ import lombok.NoArgsConstructor;
 import com.uv.api_expedientes.Pacientes.Paciente;
 import com.uv.api_expedientes.Users.User;
 
+@Entity
+@Table(name = "historia_clinica")
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-@Table(name = "historia_clinica")
 public class HistoriaClinica {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(unique = true, nullable = false)
     private int id;
 
-    // Identificacion
+    // Identificación
     @ManyToOne
     @JoinColumn(name = "usuario_id")
     private User usuario;
@@ -38,43 +37,65 @@ public class HistoriaClinica {
     @JoinColumn(name = "paciente_id")
     private Paciente paciente;
 
+    @Column(nullable = false)
     private Date fecha_creacion;
 
-    // Interrogatorio y exploracion
+    // Interrogatorio y exploración
     private String motivo_consulta;
+
     private String interrogatorio;
+
     private String padecimiento_actual;
+
     private String exploracion_fisica;
 
     // Signos vitales
     private int peso;
     private int talla;
     private float imc;
+
+    @Column(length = 20)
     private String tension_arterial;
+
     private int frecuencia_cardiaca;
     private int frecuencia_respiratoria;
     private int temperatura;
     private int saturacion;
     private int glicemia;
     private int hemoglobina;
+
+    @Column(length = 10)
     private String hemotipo;
 
     // Antecedentes
     private String antecedentes_heredo_familiares;
+
     private String antecedentes_no_patologicos;
+
     private String antecedentes_patologicos;
+
     private String antecedentes_quirurgicos;
+
     private String medicamentos_actuales;
+
     private String alergias;
+
     private String antecedentes_gineco_obstetricos;
+
     private String cancer_prostata;
+
+    @Column(length = 255)
     private String vacunas;
+
+    @Column(length = 255)
     private String adicciones;
 
-    // Diagnostico y medicaciones
+    // Diagnóstico y tratamiento
     private String diagnostico;
-    private String tratamiento;
-    private String plan_tratamiento;
-    private String observaciones;
 
+    private String tratamiento;
+
+    private String plan_tratamiento;
+
+    private String observaciones;
 }
